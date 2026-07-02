@@ -1,0 +1,945 @@
+{
+	"info": {
+		"_postman_id": "4b6e51b3-468e-4a6c-9ad5-5db4f3f01cba",
+		"name": "Multi-Tenant SaaS Platform API",
+		"description": "Comprehensive Postman collection containing all REST API routes for SUPER_ADMIN features (categories, admin management, custom domains, analytics, subscription plans, platform settings) and ADMIN features (tenant user management, tenant details).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login as Super Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.globals.set(\"superAdminToken\", jsonData.token);",
+									"    console.log(\"Saved superAdminToken global variable\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Super Admin\",\n  \"email\": \"admin@saas.local\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.globals.set(\"adminToken\", jsonData.token);",
+									"    console.log(\"Saved adminToken global variable\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"user@saas.local\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@company.local\",\n  \"password\": \"password123\",\n  \"companyName\": \"Jane Corp\",\n  \"subdomain\": \"jane\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/register-admin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register-admin"
+							]
+						},
+						"description": "Register a new Admin and Tenant. The status starts as pending/inactive until approved by the Super Admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@saas.local\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						},
+						"description": "Generates OTP and sends to user's email (dev: logs to console)."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@saas.local\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"newStrongPass123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						},
+						"description": "Reset password using OTP."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Super Admin Features",
+			"item": [
+				{
+					"name": "Category Management",
+					"item": [
+						{
+							"name": "Create Category",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"E-Commerce\",\n  \"description\": \"Online shopping and retail operations\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/categories",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/categories",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Category",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"E-Commerce Retail\",\n  \"description\": \"Updated online shopping description\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/categories/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Category",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/categories/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin Management",
+					"item": [
+						{
+							"name": "Create Admin Account",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"Alice\",\n  \"lastName\": \"Smith\",\n  \"email\": \"alice@company.local\",\n  \"password\": \"adminpassword123\",\n  \"companyName\": \"Alice Enterprises\",\n  \"subdomain\": \"alice\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins"
+									]
+								},
+								"description": "Create an Admin account directly. This account is automatically activated and approved."
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Admin Accounts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Admin Account",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"Alice Updated\",\n  \"lastName\": \"Smith\",\n  \"active\": true\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins/2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approve Admin Registration",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins/3/approve",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins",
+										"3",
+										"approve"
+									]
+								},
+								"description": "Approve a self-registered Admin registration (ID 3 in sample). Activates both the Admin and their Tenant."
+							},
+							"response": []
+						},
+						{
+							"name": "Assign Categories to Admin",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"categoryIds\": [1]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins/2/categories",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins",
+										"2",
+										"categories"
+									]
+								},
+								"description": "Assign one or multiple categories to an Admin user."
+							},
+							"response": []
+						},
+						{
+							"name": "Disable or Enable Admin",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/admins/2/status?active=false",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"admins",
+										"2",
+										"status"
+									],
+									"query": [
+										{
+											"key": "active",
+											"value": "false"
+										}
+									]
+								},
+								"description": "Set dynamic active/disabled status for an ADMIN user. Also locks out the linked Tenant if disabled."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tenant Management",
+					"item": [
+						{
+							"name": "View All Tenants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"tenants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manage Custom Domain",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"customDomain\": \"alice.customdomain.com\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/tenants/2/custom-domain",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"tenants",
+										"2",
+										"custom-domain"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manage Subdomain",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/tenants/2/subdomain?subdomain=aliceupdated",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"tenants",
+										"2",
+										"subdomain"
+									],
+									"query": [
+										{
+											"key": "subdomain",
+											"value": "aliceupdated"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Subscription Plans",
+					"item": [
+						{
+							"name": "Create Plan",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Enterprise Plan\",\n  \"price\": 199.99,\n  \"features\": \"Unlimited users, Premium database isolation, SLA support\",\n  \"durationDays\": 365,\n  \"active\": true\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/subscription-plans",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"subscription-plans"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Plans",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/subscription-plans",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"subscription-plans"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Plan",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Enterprise Premium Plan\",\n  \"price\": 249.99,\n  \"features\": \"All core + 24/7 support\",\n  \"durationDays\": 365,\n  \"active\": true\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/subscription-plans/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"subscription-plans",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Plan",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/subscription-plans/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"subscription-plans",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Platform Settings",
+					"item": [
+						{
+							"name": "Get Platform Settings",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/settings",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"settings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Platform Setting",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"settingKey\": \"site_maintenance_mode\",\n  \"settingValue\": \"false\",\n  \"description\": \"Status setting for portal global availability\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/super-admin/settings",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"super-admin",
+										"settings"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "View Platform Analytics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/super-admin/analytics",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"super-admin",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{superAdminToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin Features",
+			"item": [
+				{
+					"name": "Get Tenant Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/admin/tenant",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"tenant"
+							]
+						},
+						"description": "View details of the ADMIN's own tenant, such as subdomain and dynamic tenant URL."
+					},
+					"response": []
+				},
+				{
+					"name": "User Management",
+					"item": [
+						{
+							"name": "Create Tenant User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Staff\",\n  \"email\": \"john@tenantcompany.local\",\n  \"password\": \"staffpassword123\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/admin/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"users"
+									]
+								},
+								"description": "Create a new regular USER belonging to this ADMIN's tenant."
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Tenant Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/admin/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"users"
+									]
+								},
+								"description": "Retrieve all regular users registered under this ADMIN's specific tenant."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Tenant User",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"John Updated\",\n  \"lastName\": \"Staff\",\n  \"active\": true\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/admin/users/4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"users",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Tenant User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/admin/users/4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"users",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{adminToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "superAdminToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
