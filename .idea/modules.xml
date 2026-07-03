@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/multi -role.iml" filepath="$PROJECT_DIR$/.idea/multi -role.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-role.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-role.main.iml" />
     </modules>
   </component>
 </project>

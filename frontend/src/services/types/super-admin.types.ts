@@ -1,4 +1,8 @@
-// Super Admin service type definitions
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
 
 export interface Category {
   id: number;

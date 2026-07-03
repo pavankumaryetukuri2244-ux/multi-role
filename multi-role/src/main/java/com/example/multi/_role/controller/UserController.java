@@ -4,7 +4,11 @@ import com.example.multi._role.dto.request.UpdateProfileRequest;
 import com.example.multi._role.dto.response.ApiResponse;
 import com.example.multi._role.dto.response.TenantResponse;
 import com.example.multi._role.dto.response.UserResponse;
+import com.example.multi._role.entity.Product;
+import com.example.multi._role.entity.Order;
 import com.example.multi._role.service.UserService;
+import com.example.multi._role.service.ProductService;
+import com.example.multi._role.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -20,6 +25,8 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final ProductService productService;
+    private final OrderService orderService;
 
     /**
      * Get logged-in User's own profile
@@ -66,6 +73,62 @@ public class UserController {
                 .success(true)
                 .message("Profile updated successfully")
                 .data(response)
+                .build());
+    }
+
+    /**
+     * Get all products available in user's tenant
+     *
+     * GET /api/v1/user/products
+     */
+    @GetMapping("/products")
+    public ResponseEntity<ApiResponse<List<Product>>> getProducts(Principal principal) {
+        List<Product> products = productService.getProductsByTenant(principal.getName());
+        return ResponseEntity.ok(ApiResponse.<List<Product>>builder()
+                .success(true)
+                .message("Products retrieved successfully")
+                .data(products)
+                .build());
+    }
+
+    /**
+     * Order Request DTO
+     */
+    public static class OrderRequest {
+        public Long productId;
+        public Integer quantity;
+    }
+
+    /**
+     * Place an order (buy product)
+     *
+     * POST /api/v1/user/orders
+     */
+    @PostMapping("/orders")
+    public ResponseEntity<ApiResponse<Order>> placeOrder(
+            @Valid @RequestBody OrderRequest request,
+            Principal principal
+    ) {
+        Order order = orderService.placeOrder(request.productId, request.quantity, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Order>builder()
+                .success(true)
+                .message("Order placed successfully")
+                .data(order)
+                .build());
+    }
+
+    /**
+     * Get logged-in user's own orders
+     *
+     * GET /api/v1/user/orders
+     */
+    @GetMapping("/orders")
+    public ResponseEntity<ApiResponse<List<Order>>> getMyOrders(Principal principal) {
+        List<Order> orders = orderService.getOrdersByUser(principal.getName());
+        return ResponseEntity.ok(ApiResponse.<List<Order>>builder()
+                .success(true)
+                .message("Orders retrieved successfully")
+                .data(orders)
                 .build());
     }
 }

@@ -5,7 +5,11 @@ import com.example.multi._role.dto.request.UpdateUserRequest;
 import com.example.multi._role.dto.response.ApiResponse;
 import com.example.multi._role.dto.response.TenantResponse;
 import com.example.multi._role.dto.response.UserResponse;
+import com.example.multi._role.entity.Product;
+import com.example.multi._role.entity.Order;
 import com.example.multi._role.service.AdminService;
+import com.example.multi._role.service.ProductService;
+import com.example.multi._role.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,8 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private final ProductService productService;
+    private final OrderService orderService;
 
     /**
      * Create User in ADMIN's Tenant
@@ -103,6 +109,90 @@ public class AdminController {
                 .success(true)
                 .message("Tenant information retrieved successfully")
                 .data(tenant)
+                .build());
+    }
+
+    /**
+     * Get all products for admin's tenant
+     *
+     * GET /api/v1/admin/products
+     */
+    @GetMapping("/products")
+    public ResponseEntity<ApiResponse<List<Product>>> getProducts(Principal principal) {
+        List<Product> products = productService.getProductsByTenant(principal.getName());
+        return ResponseEntity.ok(ApiResponse.<List<Product>>builder()
+                .success(true)
+                .message("Products retrieved successfully")
+                .data(products)
+                .build());
+    }
+
+    /**
+     * Create product for admin's tenant
+     *
+     * POST /api/v1/admin/products
+     */
+    @PostMapping("/products")
+    public ResponseEntity<ApiResponse<Product>> createProduct(
+            @Valid @RequestBody Product product,
+            Principal principal
+    ) {
+        Product created = productService.createProduct(product, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Product>builder()
+                .success(true)
+                .message("Product created successfully")
+                .data(created)
+                .build());
+    }
+
+    /**
+     * Update product in admin's tenant
+     *
+     * PUT /api/v1/admin/products/{id}
+     */
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ApiResponse<Product>> updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody Product product,
+            Principal principal
+    ) {
+        Product updated = productService.updateProduct(id, product, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Product>builder()
+                .success(true)
+                .message("Product updated successfully")
+                .data(updated)
+                .build());
+    }
+
+    /**
+     * Delete product from admin's tenant
+     *
+     * DELETE /api/v1/admin/products/{id}
+     */
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(
+            @PathVariable Long id,
+            Principal principal
+    ) {
+        productService.deleteProduct(id, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Product deleted successfully")
+                .build());
+    }
+
+    /**
+     * Get all orders placed in admin's tenant
+     *
+     * GET /api/v1/admin/orders
+     */
+    @GetMapping("/orders")
+    public ResponseEntity<ApiResponse<List<Order>>> getTenantOrders(Principal principal) {
+        List<Order> orders = orderService.getOrdersByTenant(principal.getName());
+        return ResponseEntity.ok(ApiResponse.<List<Order>>builder()
+                .success(true)
+                .message("Orders retrieved successfully")
+                .data(orders)
                 .build());
     }
 }

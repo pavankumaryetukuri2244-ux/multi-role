@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Dialog, DialogContent, TextField, InputAdornment, List, ListItem, ListItemText, ListItemIcon, Typography, Divider, Box } from '@mui/material';
+import { Dialog, DialogContent, TextField, InputAdornment, List, ListItemButton, ListItemText, ListItemIcon, Typography, Divider, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -14,15 +14,15 @@ import type { RootState } from '@/store';
 interface SearchResult { label: string; path: string; category: string; icon: React.ReactNode; }
 
 const SUPER_ADMIN_RESULTS: SearchResult[] = [
-  { label: 'Dashboard', path: ROUTES.SUPER_ADMIN_DASHBOARD, category: 'Pages', icon: <DashboardIcon /> },
-  { label: 'Admin Management', path: ROUTES.SUPER_ADMIN_ADMINS, category: 'Pages', icon: <PeopleIcon /> },
-  { label: 'Tenant Management', path: ROUTES.SUPER_ADMIN_TENANTS, category: 'Pages', icon: <BusinessIcon /> },
-  { label: 'Analytics', path: ROUTES.SUPER_ADMIN_ANALYTICS, category: 'Pages', icon: <DashboardIcon /> },
+  { label: 'Dashboard', path: ROUTES.SUPER_ADMIN.DASHBOARD, category: 'Pages', icon: <DashboardIcon /> },
+  { label: 'Admin Management', path: ROUTES.SUPER_ADMIN.ADMINS, category: 'Pages', icon: <PeopleIcon /> },
+  { label: 'Tenant Management', path: ROUTES.SUPER_ADMIN.TENANTS, category: 'Pages', icon: <BusinessIcon /> },
+  { label: 'Analytics', path: ROUTES.SUPER_ADMIN.ANALYTICS, category: 'Pages', icon: <DashboardIcon /> },
 ];
 const ADMIN_RESULTS: SearchResult[] = [
-  { label: 'Dashboard', path: ROUTES.ADMIN_DASHBOARD, category: 'Pages', icon: <DashboardIcon /> },
-  { label: 'Users', path: ROUTES.ADMIN_USERS, category: 'Pages', icon: <PeopleIcon /> },
-  { label: 'Orders', path: ROUTES.ADMIN_ORDERS, category: 'Pages', icon: <DashboardIcon /> },
+  { label: 'Dashboard', path: ROUTES.ADMIN.DASHBOARD, category: 'Pages', icon: <DashboardIcon /> },
+  { label: 'Users', path: ROUTES.ADMIN.USERS, category: 'Pages', icon: <PeopleIcon /> },
+  { label: 'Orders', path: ROUTES.ADMIN.ORDERS, category: 'Pages', icon: <DashboardIcon /> },
 ];
 
 interface SmartSearchProps { open: boolean; onClose: () => void; }
@@ -60,10 +60,10 @@ export default function SmartSearch({ open, onClose }: SmartSearchProps) {
                 <Typography variant="caption" color="text.secondary" sx={{ px: 2, py: 1, display: 'block', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>{cat}</Typography>
                 <List dense disablePadding>
                   {results.map(r => (
-                    <ListItem key={r.path} button onClick={() => handleSelect(r.path)} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                    <ListItemButton key={r.path} onClick={() => handleSelect(r.path)} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
                       <ListItemIcon sx={{ minWidth: 36 }}>{r.icon}</ListItemIcon>
                       <ListItemText primary={r.label} />
-                    </ListItem>
+                    </ListItemButton>
                   ))}
                 </List>
               </Box>

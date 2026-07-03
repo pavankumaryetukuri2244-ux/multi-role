@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, IconButton, Tooltip, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PeopleIcon from '@mui/icons-material/People';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -19,15 +19,15 @@ export default function FloatingQuickActions() {
   if (role === 'USER') return null;
 
   const superAdminActions = [
-    { name: 'Create Admin', icon: <PeopleIcon />, path: ROUTES.SUPER_ADMIN_ADMINS },
-    { name: 'Create Category', icon: <CategoryIcon />, path: ROUTES.SUPER_ADMIN_CATEGORIES },
-    { name: 'View Analytics', icon: <AnalyticsIcon />, path: ROUTES.SUPER_ADMIN_ANALYTICS },
+    { name: 'Create Admin', icon: <PeopleIcon />, path: ROUTES.SUPER_ADMIN.ADMINS },
+    { name: 'Create Category', icon: <CategoryIcon />, path: ROUTES.SUPER_ADMIN.CATEGORIES },
+    { name: 'View Analytics', icon: <AnalyticsIcon />, path: ROUTES.SUPER_ADMIN.ANALYTICS },
   ];
 
   const adminActions = [
-    { name: 'Create User', icon: <PeopleIcon />, path: ROUTES.ADMIN_USERS },
-    { name: 'New Order', icon: <ShoppingCartIcon />, path: ROUTES.ADMIN_ORDERS },
-    { name: 'View Reports', icon: <AssessmentIcon />, path: ROUTES.ADMIN_REPORTS },
+    { name: 'Create User', icon: <PeopleIcon />, path: ROUTES.ADMIN.USERS },
+    { name: 'New Order', icon: <ShoppingCartIcon />, path: ROUTES.ADMIN.ORDERS },
+    { name: 'View Reports', icon: <AssessmentIcon />, path: ROUTES.ADMIN.REPORTS },
   ];
 
   const actions = role === 'SUPER_ADMIN' ? superAdminActions : adminActions;

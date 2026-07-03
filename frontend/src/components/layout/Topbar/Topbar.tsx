@@ -8,7 +8,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import SearchBar from './SearchBar';
-import NotificationBell from './NotificationBell';
 import ThemeSwitcher from './ThemeSwitcher';
 import ProfileMenu from './ProfileMenu';
 import NotificationCenter from '@/components/widgets/NotificationCenter';
@@ -20,9 +19,6 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
   const isLoading = useSelector((state: RootState) => state.auth.isLoading);
-
-  // ── Notification panel state ─────────────────────────────────────────────
-  const [notifAnchor, setNotifAnchor] = useState<HTMLButtonElement | null>(null);
 
   // ── Smart search modal state ─────────────────────────────────────────────
   const [searchOpen, setSearchOpen] = useState(false);
