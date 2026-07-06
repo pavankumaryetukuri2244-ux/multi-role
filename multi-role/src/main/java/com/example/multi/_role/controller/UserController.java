@@ -78,7 +78,6 @@ public class UserController {
     }
 
     /**
-<<<<<<< Updated upstream
      * Get all products available in user's tenant
      *
      * GET /api/v1/user/products
@@ -131,7 +130,10 @@ public class UserController {
                 .success(true)
                 .message("Orders retrieved successfully")
                 .data(orders)
-=======
+                .build());
+    }
+
+    /**
      * Change logged-in User's password
      *
      * PUT /api/v1/user/password
@@ -145,7 +147,7 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
                 .message("Password changed successfully")
->>>>>>> Stashed changes
                 .build());
     }
 }
+

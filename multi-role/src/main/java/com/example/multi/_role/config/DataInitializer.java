@@ -23,11 +23,8 @@ public class DataInitializer {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final TenantRepository tenantRepository;
-<<<<<<< Updated upstream
     private final ProductRepository productRepository;
-=======
     private final SubscriptionPlanRepository planRepository;
->>>>>>> Stashed changes
     private final PasswordEncoder passwordEncoder;
 
     @Bean
@@ -48,7 +45,7 @@ public class DataInitializer {
                     .filter(r -> r.getRoleName() == RoleType.ADMIN).findFirst()
                     .orElseGet(() -> { Role r = new Role(); r.setRoleName(RoleType.ADMIN); return roleRepository.save(r); });
 
-            roleRepository.findAll().stream()
+            Role userRole = roleRepository.findAll().stream()
                     .filter(r -> r.getRoleName() == RoleType.USER).findFirst()
                     .orElseGet(() -> { Role r = new Role(); r.setRoleName(RoleType.USER); return roleRepository.save(r); });
 
@@ -76,7 +73,6 @@ public class DataInitializer {
                 testTenant = tenantRepository.save(testTenant);
             }
 
-<<<<<<< Updated upstream
             // Create a test USER (Customer) user linked to the default Tenant
             boolean customerExists = userRepository.findByEmail("customer@saas.local").isPresent();
             if (!customerExists) {
@@ -96,7 +92,7 @@ public class DataInitializer {
             }
 
             // Seed default products for testTenant
-            if (productRepository.count() == 0) {
+            if (productRepository != null && productRepository.count() == 0) {
                 Product p1 = new Product();
                 p1.setName("Wireless Headphones");
                 p1.setDescription("Premium noise-cancelling over-ear headphones.");
@@ -132,16 +128,6 @@ public class DataInitializer {
                 log.info("✓ Sample products seeded for Test Company");
             }
 
-            log.info("✓ Database initialization completed!");
-            log.info("");
-            log.info("╔════════════════════════════════════════╗");
-            log.info("║  Application Ready for Testing!        ║");
-            log.info("╠════════════════════════════════════════╣");
-            log.info("║  API URL: http://localhost:8080        ║");
-            log.info("║  Health: http://localhost:8080/actuator/health");
-            log.info("║  H2 Console: http://localhost:8080/h2-console");
-            log.info("╚════════════════════════════════════════╝");
-=======
             if (userRepository.findByEmail("user@saas.local").isEmpty()) {
                 User u = new User();
                 u.setFirstName("Test"); u.setLastName("Admin");
@@ -154,7 +140,6 @@ public class DataInitializer {
                 log.info("Test ADMIN created");
             }
             log.info("Database initialization completed!");
->>>>>>> Stashed changes
         };
     }
 
