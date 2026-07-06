@@ -1,16 +1,9 @@
-﻿import { Box, Typography, Stack, Chip, Button, Card, CardContent, Grid2 } from '@mui/material';
+import { Box, Typography, Stack, Chip, Button, Card, CardContent, Grid2 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
-const MONTHLY = [
-  { month: 'Jan', revenue: 12400, orders: 145 }, { month: 'Feb', revenue: 15800, orders: 178 },
-  { month: 'Mar', revenue: 13200, orders: 156 }, { month: 'Apr', revenue: 18900, orders: 212 },
-  { month: 'May', revenue: 16500, orders: 189 }, { month: 'Jun', revenue: 21300, orders: 243 },
-];
-const BY_CATEGORY = [
-  { name: 'Electronics', value: 35 }, { name: 'Clothing', value: 25 },
-  { name: 'Food', value: 20 }, { name: 'Others', value: 20 },
-];
+const MONTHLY: any[] = [];
+const BY_CATEGORY: any[] = [];
 const COLORS = ['#6366F1', '#EC4899', '#22C55E', '#F59E0B'];
 
 export default function AdminReportsPage() {
@@ -19,7 +12,6 @@ export default function AdminReportsPage() {
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="h4" fontWeight={700}>Reports</Typography>
-          <Chip label="Demo Data" color="warning" size="small" variant="outlined" />
         </Stack>
         <Stack direction="row" spacing={1}>
           <Button variant="outlined" startIcon={<DownloadIcon />} size="small">Export CSV</Button>

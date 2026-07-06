@@ -32,6 +32,7 @@ public interface SuperAdminService {
     TenantResponse updateSubdomain(Long tenantId, String subdomain);
     TenantResponse toggleTenantStatus(Long tenantId, Boolean active);
     TenantResponse assignCategoriesToTenant(Long tenantId, Set<Long> categoryIds);
+    TenantResponse assignSubscriptionPlanToTenant(Long tenantId, Long planId);
     void deleteTenant(Long tenantId);
 
     // Subscription Plan Management

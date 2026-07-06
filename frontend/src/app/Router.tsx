@@ -51,6 +51,7 @@ const PortalNotifications = React.lazy(() => import('@/pages/portal/Notification
 const PortalRewards = React.lazy(() => import('@/pages/portal/RewardsPage'));
 const PortalWallet = React.lazy(() => import('@/pages/portal/WalletPage'));
 const PortalSettings = React.lazy(() => import('@/pages/portal/SettingsPage'));
+const CommonProfilePage = React.lazy(() => import('@/pages/common/ProfilePage'));
 
 // ─── Fullscreen lazy-load fallback ───────────────────────────────────────────
 
@@ -96,7 +97,18 @@ export default function Router() {
               )
             }
           />
-          <Route path="/register" element={<AdminRegisterPage />} />
+          {/* /register — only accessible when NOT logged in, or when logged in as USER.
+               ADMIN and SUPER_ADMIN are redirected to their dashboards. */}
+          <Route
+            path="/register"
+            element={
+              isAuthenticated && (role === 'SUPER_ADMIN' || role === 'ADMIN') ? (
+                <Navigate to={ROLE_DASHBOARD_MAP[role]} replace />
+              ) : (
+                <AdminRegisterPage />
+              )
+            }
+          />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/otp" element={<OtpPage />} />
@@ -119,6 +131,7 @@ export default function Router() {
               <Route path="/super-admin/subscription-plans" element={<SubscriptionPlansPage />} />
               <Route path="/super-admin/analytics" element={<AnalyticsPage />} />
               <Route path="/super-admin/settings" element={<SettingsPage />} />
+              <Route path="/super-admin/profile" element={<CommonProfilePage />} />
               <Route path="/super-admin/audit-logs" element={<AuditLogsPage />} />
             </Route>
           </Route>
@@ -136,6 +149,7 @@ export default function Router() {
               <Route path="/admin/inventory" element={<AdminInventoryPage />} />
               <Route path="/admin/marketing" element={<AdminMarketingPage />} />
               <Route path="/admin/settings" element={<AdminSettingsPage />} />
+              <Route path="/admin/profile" element={<CommonProfilePage />} />
             </Route>
           </Route>
         </Route>

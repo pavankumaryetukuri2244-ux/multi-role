@@ -6,32 +6,33 @@ import { glassLight } from './glassmorphism';
 export const lightTheme = createTheme({
   palette: { mode: 'light', ...lightTokens },
   typography,
-  shape: { borderRadius: 12 },
-  ...glassLight,
+  shape: { borderRadius: 4 },
   components: {
     MuiButton: {
       styleOverrides: {
-        root: { borderRadius: 8, textTransform: 'none', fontWeight: 600 },
+        root: { borderRadius: 4, textTransform: 'none', fontWeight: 600, boxShadow: '0 1px 2px rgba(15,17,17,0.15)' },
+        containedPrimary: { color: '#0F1111' },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
+          borderRadius: 8,
+          border: '1px solid #D5D9D9',
+          boxShadow: 'none',
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
-        root: { borderRadius: 12 },
+        root: { borderRadius: 4 },
       },
     },
     MuiTextField: {
       defaultProps: { variant: 'outlined' },
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-root': { borderRadius: 8 },
+          '& .MuiOutlinedInput-root': { borderRadius: 4 },
         },
       },
     },

@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface SubscriptionPlanRepository extends JpaRepository<SubscriptionPlan, Long> {
     Optional<SubscriptionPlan> findByName(String name);
     boolean existsByName(String name);
+    Optional<SubscriptionPlan> findByPlanCode(String planCode);
+    boolean existsByPlanCode(String planCode);
 }

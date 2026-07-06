@@ -43,8 +43,44 @@ const INITIAL: FormValues = {
   companyName: '', subdomain: '', tenantId: '',
 };
 
+<<<<<<< Updated upstream
 export default function RegisterPage() {
   const [role, setRole] = useState<'USER' | 'ADMIN'>('USER');
+=======
+function validateForm(v: FormValues): FormErrors {
+  const errors: FormErrors = {};
+
+  const firstNameErr = validateRequired(v.firstName, 'First name');
+  if (firstNameErr) errors.firstName = firstNameErr;
+
+  const lastNameErr = validateRequired(v.lastName, 'Last name');
+  if (lastNameErr) errors.lastName = lastNameErr;
+
+  // phone is optional — but if provided it must be exactly 10 digits
+  if (v.phone.trim() && v.phone.replace(/\D/g, '').length !== 10) {
+    errors.general = 'Phone number must be exactly 10 digits';
+  }
+
+  // email is optional — only validate format if provided
+  if (v.email.trim()) {
+    const emailErr = validateEmail(v.email);
+    if (emailErr) errors.email = emailErr;
+  }
+
+  const pwErr = validatePassword(v.password);
+  if (pwErr) errors.password = pwErr;
+
+  if (!v.confirmPassword) {
+    errors.confirmPassword = 'Please confirm your password';
+  } else if (v.password !== v.confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match';
+  }
+
+  return errors;
+}
+
+export default function AdminRegisterPage() {
+>>>>>>> Stashed changes
   const [values, setValues] = useState<FormValues>(INITIAL);
   const [errors, setErrors] = useState<FormErrors>({});
   const [tenants, setTenants] = useState<TenantResponse[]>([]);
@@ -182,7 +218,7 @@ export default function RegisterPage() {
                 : "You can now sign in to access your portal and start buying products."}
             </Alert>
             <Typography variant="body2" color="text.secondary" textAlign="center">
-              <MuiLink component={Link} to="/login" underline="hover" fontWeight={600}>Back to Sign In</MuiLink>
+              <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} sx={{ color: '#6366F1' }}>Back to Sign In</MuiLink>
             </Typography>
           </CardContent>
         </Card>
@@ -215,7 +251,10 @@ export default function RegisterPage() {
 
           {errors.general && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{errors.general}</Alert>}
 
-          <Box component="form" onSubmit={handleSubmit} noValidate>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{
+            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' },
+            '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' },
+          }}>
             <Stack spacing={2.5}>
               
               {/* First Name + Last Name */}
@@ -228,9 +267,33 @@ export default function RegisterPage() {
                   required autoComplete="family-name" />
               </Stack>
 
+<<<<<<< Updated upstream
               {/* Phone number */}
               <TextField fullWidth label="Phone Number (optional)" name="phone" value={values.phone}
                 onChange={handleChange} type="tel" autoComplete="tel" />
+=======
+              {/* Phone number — digits only, exactly 10 */}
+              <TextField
+                fullWidth
+                label="Phone Number"
+                name="phone"
+                value={values.phone}
+                onChange={(e) => {
+                  // Strip every non-digit character and cap at 10
+                  const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setValues(p => ({ ...p, phone: digits }));
+                }}
+                type="tel"
+                autoComplete="tel"
+                inputProps={{ inputMode: 'numeric', maxLength: 10 }}
+                helperText={
+                  values.phone.length > 0 && values.phone.length < 10
+                    ? `${values.phone.length}/10 digits`
+                    : '10-digit mobile number'
+                }
+                error={values.phone.length > 0 && values.phone.length < 10}
+              />
+>>>>>>> Stashed changes
 
               {/* Email */}
               <TextField fullWidth label="Email Address" name="email" type="email"
@@ -309,7 +372,7 @@ export default function RegisterPage() {
 
               <Typography variant="body2" textAlign="center" color="text.secondary">
                 Already have an account?{' '}
-                <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} color="primary.main">
+                <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} sx={{ color: '#6366F1' }}>
                   Sign In
                 </MuiLink>
               </Typography>

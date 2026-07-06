@@ -178,6 +178,7 @@ export default function OtpPage() {
                     width: 52,
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 1.5,
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' },
                     },
                   }}
                   autoFocus={index === 0}
@@ -204,7 +205,7 @@ export default function OtpPage() {
                 component="button"
                 underline="hover"
                 onClick={handleResend}
-                sx={{ cursor: 'pointer', background: 'none', border: 'none', p: 0, font: 'inherit', color: 'primary.main' }}
+                sx={{ cursor: 'pointer', background: 'none', border: 'none', p: 0, font: 'inherit', color: '#6366F1' }}
               >
                 Resend code
               </MuiLink>

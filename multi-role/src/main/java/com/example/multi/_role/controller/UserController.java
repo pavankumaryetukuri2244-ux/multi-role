@@ -1,6 +1,7 @@
 package com.example.multi._role.controller;
 
 import com.example.multi._role.dto.request.UpdateProfileRequest;
+import com.example.multi._role.dto.request.ChangePasswordRequest;
 import com.example.multi._role.dto.response.ApiResponse;
 import com.example.multi._role.dto.response.TenantResponse;
 import com.example.multi._role.dto.response.UserResponse;
@@ -77,6 +78,7 @@ public class UserController {
     }
 
     /**
+<<<<<<< Updated upstream
      * Get all products available in user's tenant
      *
      * GET /api/v1/user/products
@@ -129,6 +131,21 @@ public class UserController {
                 .success(true)
                 .message("Orders retrieved successfully")
                 .data(orders)
+=======
+     * Change logged-in User's password
+     *
+     * PUT /api/v1/user/password
+     */
+    @PutMapping("/password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            Principal principal
+    ) {
+        userService.changePassword(request, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Password changed successfully")
+>>>>>>> Stashed changes
                 .build());
     }
 }

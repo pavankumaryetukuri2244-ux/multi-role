@@ -9,5 +9,12 @@ public class CategoryRequest {
     @NotBlank(message = "Category name is required")
     private String name;
 
+    @NotBlank(message = "Category code is required")
+    private String categoryCode;
+
     private String description;
+
+    private String icon;
+
+    private String status = "ACTIVE";
 }

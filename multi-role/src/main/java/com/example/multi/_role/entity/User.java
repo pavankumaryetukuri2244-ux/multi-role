@@ -29,9 +29,15 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    private String phone;
+
+    private String status = "ACTIVE"; // ACTIVE, INACTIVE, PENDING
+
     private Boolean active = true;
 
     private Boolean approved = true;
+
+    private String resetPasswordToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")

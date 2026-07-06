@@ -13,6 +13,7 @@ export interface Category {
 
 export interface CategoryRequest {
   name: string;
+  categoryCode: string;
   description: string;
 }
 
@@ -28,6 +29,8 @@ export interface UserResponse {
   subdomain?: string;
   categories?: Category[];
   createdAt?: string;
+  phone?: string;
+  tenantCode?: string;
 }
 
 export interface TenantResponse {
@@ -96,6 +99,11 @@ export interface CreateAdminWithTenantRequest {
   companyName?: string;
   subdomain?: string;
   tenantId?: number;
+  categoryId?: number;
+  planId?: number;
+  phone?: string;
+  tenantCode?: string;
+  gstin?: string;
 }
 
 export interface UpdateAdminRequest {

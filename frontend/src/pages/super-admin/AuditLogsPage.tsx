@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+
 import { Box, Typography, Chip, Skeleton, Stack } from '@mui/material';
 import { DataTable, EmptyState } from '@/components/common';
 import type { Column } from '@/components/common';
-import { QUERY_KEYS } from '@/constants/queryKeys';
-import { getAdmins, getCategories, getSubscriptionPlans } from '@/services/superAdmin.service';
+
 import { formatDate } from '@/utils/formatters';
 
 interface AuditEvent {
@@ -23,48 +22,13 @@ const ACTION_COLORS: Record<string, 'success' | 'info' | 'warning' | 'error' | '
 };
 
 export default function AuditLogsPage() {
-  const { data: admins = [], isLoading: loadingAdmins } = useQuery({ queryKey: QUERY_KEYS.admins, queryFn: getAdmins });
-  const { data: categories = [], isLoading: loadingCats } = useQuery({ queryKey: QUERY_KEYS.categories, queryFn: getCategories });
-  const { data: plans = [], isLoading: loadingPlans } = useQuery({ queryKey: QUERY_KEYS.subscriptionPlans, queryFn: getSubscriptionPlans });
+  const isLoading = false;
 
-  const isLoading = loadingAdmins || loadingCats || loadingPlans;
-
-  // Build audit log entries from real data
+  // We currently do not have a real Audit Log API. 
+  // Returning an empty array until the backend endpoint is implemented.
   const auditEvents = useMemo<AuditEvent[]>(() => {
-    const events: AuditEvent[] = [];
-
-    admins.forEach((admin: { id: number; firstName: string; lastName: string; email: string; active: boolean }) => {
-      events.push({
-        id: `admin-${admin.id}`,
-        timestamp: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
-        action: admin.active ? 'CREATE' : 'UPDATE',
-        entity: 'Admin',
-        description: `${admin.firstName} ${admin.lastName} (${admin.email})`,
-      });
-    });
-
-    categories.forEach((cat: { id: number; name: string }) => {
-      events.push({
-        id: `cat-${cat.id}`,
-        timestamp: new Date(Date.now() - Math.random() * 86400000 * 14).toISOString(),
-        action: 'CREATE',
-        entity: 'Category',
-        description: cat.name,
-      });
-    });
-
-    plans.forEach((plan: { id: number; name: string; active: boolean }) => {
-      events.push({
-        id: `plan-${plan.id}`,
-        timestamp: new Date(Date.now() - Math.random() * 86400000 * 30).toISOString(),
-        action: plan.active ? 'CREATE' : 'UPDATE',
-        entity: 'SubscriptionPlan',
-        description: plan.name,
-      });
-    });
-
-    return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  }, [admins, categories, plans]);
+    return [];
+  }, []);
 
   const columns: Column<AuditEvent>[] = [
     { id: 'timestamp', label: 'Timestamp', render: (_: unknown, row: AuditEvent) => formatDate(row.timestamp), minWidth: 140 },

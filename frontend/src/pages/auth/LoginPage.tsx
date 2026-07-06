@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -25,7 +25,10 @@ import type { AppDispatch, RootState } from '@/store';
 export default function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, role } = useSelector((state: RootState) => state.auth);
+
+  // ADMIN and SUPER_ADMIN should never see "Create Account"
+  const canRegister = !role || role === 'USER';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -122,6 +125,7 @@ export default function LoginPage() {
               onChange={e => { setEmail(e.target.value); if (emailError) setEmailError(null); }}
               error={Boolean(emailError)}
               helperText={emailError ?? ''}
+              sx={{ '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' }, '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' } }}
             />
 
             <TextField
@@ -143,12 +147,13 @@ export default function LoginPage() {
                   </InputAdornment>
                 ),
               }}
+              sx={{ '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' }, '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' } }}
             />
 
             {/* Remember me + Forgot password */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: -1 }}>
               <FormControlLabel
-                control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} size="small" color="primary" />}
+                control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} size="small" sx={{ '&.Mui-checked': { color: '#6366F1' } }} />}
                 label={<Typography variant="body2" color="text.secondary">Remember me</Typography>}
               />
               <Link
@@ -157,7 +162,7 @@ export default function LoginPage() {
                 variant="body2"
                 onClick={() => navigate('/forgot-password')}
                 underline="hover"
-                sx={{ color: 'primary.main', fontWeight: 500, cursor: 'pointer' }}
+                sx={{ color: '#6366F1', fontWeight: 500, cursor: 'pointer' }}
               >
                 Forgot password?
               </Link>
@@ -182,22 +187,24 @@ export default function LoginPage() {
               {isLoading ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : 'Sign In'}
             </Button>
 
-            {/* Create account */}
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" component="span" color="text.secondary">
-                Don&apos;t have an account?{' '}
-              </Typography>
-              <Link
-                component="button"
-                type="button"
-                variant="body2"
-                onClick={() => navigate('/register')}
-                underline="hover"
-                sx={{ color: 'primary.main', fontWeight: 600, cursor: 'pointer' }}
-              >
-                Create Account
-              </Link>
-            </Box>
+            {/* Create account — only for non-admin visitors */}
+            {canRegister && (
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" component="span" color="text.secondary">
+                  Don&apos;t have an account?{' '}
+                </Typography>
+                <Link
+                  component="button"
+                  type="button"
+                  variant="body2"
+                  onClick={() => navigate('/register')}
+                  underline="hover"
+                  sx={{ color: '#6366F1', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Create Account
+                </Link>
+              </Box>
+            )}
           </Box>
         </CardContent>
       </Card>

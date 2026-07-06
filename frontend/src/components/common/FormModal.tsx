@@ -26,7 +26,8 @@ const FormModal: React.FC<FormModalProps> = ({
   loading = false,
 }) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth={maxWidth} fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth={maxWidth} fullWidth
+      PaperProps={{ sx: { maxHeight: '92vh' } }}>
       {loading && (
         <LinearProgress
           sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
@@ -38,6 +39,9 @@ const FormModal: React.FC<FormModalProps> = ({
           justifyContent: 'space-between',
           alignItems: 'center',
           pr: 1,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          pb: 1.5,
         }}
       >
         {title}
@@ -51,7 +55,7 @@ const FormModal: React.FC<FormModalProps> = ({
           <CloseIcon fontSize="small" />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ pt: 2, pb: 3, px: 3 }}>{children}</DialogContent>
+      <DialogContent sx={{ pt: 2.5, pb: 3, px: 3, overflowY: 'auto' }}>{children}</DialogContent>
     </Dialog>
   );
 };

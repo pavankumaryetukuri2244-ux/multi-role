@@ -36,7 +36,7 @@ const SuperAdminLayout: React.FC = () => {
     dispatch(toggleSidebar());
   };
 
-  const sidebarWidth = sidebarCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH;
+  // const sidebarWidth = 280;
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -55,8 +55,6 @@ const SuperAdminLayout: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           minWidth: 0,
-          marginLeft: { xs: 0, sm: `${sidebarWidth}px` },
-          transition: 'margin-left 0.25s ease-out',
         }}
       >
         {/* Topbar */}
@@ -72,7 +70,7 @@ const SuperAdminLayout: React.FC = () => {
             exit="exit"
             style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
           >
-            <Box sx={{ flex: 1, p: 3 }}>
+            <Box sx={{ flex: 1, p: 3, mt: '64px' }}>
               <Outlet />
             </Box>
           </motion.div>

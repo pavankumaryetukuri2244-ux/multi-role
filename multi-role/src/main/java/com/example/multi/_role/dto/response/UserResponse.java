@@ -32,5 +32,11 @@ public class UserResponse {
 
     private String subdomain;
 
+    private String tenantCode;
+
+    private String phone;
+
+    private java.time.LocalDateTime createdAt;
+
     private Set<String> categories;
 }

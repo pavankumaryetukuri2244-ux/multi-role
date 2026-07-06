@@ -67,6 +67,8 @@ public class SuperAdminController {
                 .build());
     }
 
+
+
     // --- Admin Account Management ---
 
     @PostMapping("/admins")
@@ -227,6 +229,19 @@ public class SuperAdminController {
         return ResponseEntity.ok(ApiResponse.<TenantResponse>builder()
                 .success(true)
                 .message("Categories assigned to Tenant successfully")
+                .data(response)
+                .build());
+    }
+
+    @PutMapping("/tenants/{id}/subscription-plan")
+    public ResponseEntity<ApiResponse<TenantResponse>> assignSubscriptionPlan(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long planId
+    ) {
+        TenantResponse response = superAdminService.assignSubscriptionPlanToTenant(id, planId);
+        return ResponseEntity.ok(ApiResponse.<TenantResponse>builder()
+                .success(true)
+                .message("Subscription Plan assigned to Tenant successfully")
                 .data(response)
                 .build());
     }

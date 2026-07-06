@@ -1,13 +1,6 @@
 import React from 'react';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import CategoryIcon from '@mui/icons-material/Category';
 import PeopleIcon from '@mui/icons-material/People';
-import BusinessIcon from '@mui/icons-material/Business';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
-import DnsIcon from '@mui/icons-material/Dns';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ArticleIcon from '@mui/icons-material/Article';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -19,6 +12,11 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CategoryIcon from '@mui/icons-material/Category';
+import DomainIcon from '@mui/icons-material/Domain';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import type { UserRole } from '@/constants/roles';
 import { ROUTES } from '@/constants/routes';
 
@@ -40,15 +38,14 @@ export interface NavItem {
  */
 export const SIDEBAR_NAV_CONFIG: Record<UserRole, NavItem[]> = {
   SUPER_ADMIN: [
-    { label: 'Dashboard',          path: ROUTES.SUPER_ADMIN.DASHBOARD,          icon: React.createElement(DashboardIcon)     },
-    { label: 'Categories',         path: ROUTES.SUPER_ADMIN.CATEGORIES,         icon: React.createElement(CategoryIcon)      },
-    { label: 'Admin Management',   path: ROUTES.SUPER_ADMIN.ADMINS,             icon: React.createElement(PeopleIcon)        },
-    { label: 'Tenant Management',  path: ROUTES.SUPER_ADMIN.TENANTS,            icon: React.createElement(BusinessIcon)      },
-    { label: 'Subscription Plans', path: ROUTES.SUPER_ADMIN.SUBSCRIPTION_PLANS, icon: React.createElement(SubscriptionsIcon) },
-    { label: 'Analytics',          path: ROUTES.SUPER_ADMIN.ANALYTICS,          icon: React.createElement(AnalyticsIcon)     },
-    { label: 'Domain Management',  path: ROUTES.SUPER_ADMIN.TENANTS,            icon: React.createElement(DnsIcon)           },
-    { label: 'Platform Settings',  path: ROUTES.SUPER_ADMIN.SETTINGS,           icon: React.createElement(SettingsIcon)      },
-    { label: 'Audit Logs',         path: ROUTES.SUPER_ADMIN.AUDIT_LOGS,         icon: React.createElement(ArticleIcon)       },
+    { label: 'Dashboard',      path: ROUTES.SUPER_ADMIN.DASHBOARD,          icon: React.createElement(DashboardIcon) },
+    { label: 'Admin Details',  path: ROUTES.SUPER_ADMIN.ADMINS,             icon: React.createElement(PeopleIcon)    },
+    { label: 'Categories',     path: ROUTES.SUPER_ADMIN.CATEGORIES,         icon: React.createElement(CategoryIcon)  },
+    { label: 'Tenants',        path: ROUTES.SUPER_ADMIN.TENANTS,            icon: React.createElement(DomainIcon)    },
+    { label: 'Subscriptions',  path: ROUTES.SUPER_ADMIN.SUBSCRIPTION_PLANS, icon: React.createElement(SubscriptionsIcon) },
+    { label: 'Analytics',      path: ROUTES.SUPER_ADMIN.ANALYTICS,          icon: React.createElement(AssessmentIcon) },
+    { label: 'Audit Logs',     path: ROUTES.SUPER_ADMIN.AUDIT_LOGS,         icon: React.createElement(ListAltIcon)   },
+    { label: 'Settings',       path: ROUTES.SUPER_ADMIN.SETTINGS,           icon: React.createElement(SettingsIcon)  },
   ],
 
   ADMIN: [

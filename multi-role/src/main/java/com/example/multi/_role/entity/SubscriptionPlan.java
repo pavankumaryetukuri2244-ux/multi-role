@@ -16,14 +16,36 @@ public class SubscriptionPlan extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+    @Column(nullable = false, unique = true)
+    private String planCode; // FREE, STARTER, BUSINESS, PRO, ENTERPRISE
 
-    private String features;
+    private String description;
 
     @Column(nullable = false)
-    private Integer durationDays;
+    private BigDecimal price; // Standard monthly price (fallback)
+
+    @Column(nullable = false)
+    private BigDecimal monthlyPrice = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    private BigDecimal yearlyPrice = BigDecimal.ZERO;
+
+    private Integer durationDays = 30;
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    private String features;
+
+    // SaaS resource limits
+    private Integer maxAdmins = 1;
+    private Integer maxUsers = 10;
+    private Integer maxProducts = 100;
+    private Long storageLimit = 1024L; // in MB
+    private Integer aiRequestLimit = 0;
+    
+    // Feature enablement flags
+    private Boolean customDomainEnabled = false;
+    private Boolean analyticsEnabled = false;
+    private Boolean apiAccessEnabled = false;
 }

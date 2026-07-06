@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { Box, Typography, List, ListItemButton, ListItemText, Popover, Badge, IconButton, Divider, Stack } from '@mui/material';
+=======
+import { Box, Badge, IconButton, Popover, Typography, Stack, List, ListItemButton, ListItemText, Divider } from '@mui/material';
+>>>>>>> Stashed changes
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

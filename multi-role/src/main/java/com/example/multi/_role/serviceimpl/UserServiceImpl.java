@@ -11,6 +11,7 @@ import com.example.multi._role.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,6 +51,19 @@ public class UserServiceImpl implements UserService {
         user.setLastName(request.getLastName());
         User savedUser = userRepository.save(user);
         return mapToUserResponse(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(com.example.multi._role.dto.request.ChangePasswordRequest request, String email) {
+        User user = findUserByEmail(email);
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Incorrect current password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
     // --- Private Helpers ---

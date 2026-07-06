@@ -22,9 +22,17 @@ public class CreateAdminWithTenantRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
+    private String phone;
+
     private Long tenantId;
 
     private String companyName;
 
     private String subdomain;
+
+    private String tenantCode;
+
+    private Long categoryId;
+
+    private Long planId;
 }

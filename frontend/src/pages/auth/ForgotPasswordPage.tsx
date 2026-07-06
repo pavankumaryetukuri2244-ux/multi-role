@@ -139,14 +139,17 @@ export default function ForgotPasswordPage() {
                   If that email exists, a reset link has been sent.
                 </Alert>
                 <Typography variant="body2" textAlign="center">
-                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500}>
+                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500} sx={{ color: '#6366F1' }}>
                     ← Back to login
                   </Link>
                 </Typography>
               </Box>
             ) : (
               /* Form */
-              <Box component="form" onSubmit={handleSubmit} noValidate>
+              <Box component="form" onSubmit={handleSubmit} noValidate sx={{
+                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' },
+                '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' },
+              }}>
                 <TextField
                   fullWidth
                   label="Email address"
@@ -178,7 +181,7 @@ export default function ForgotPasswordPage() {
                 </Button>
 
                 <Typography variant="body2" textAlign="center">
-                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500}>
+                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500} sx={{ color: '#6366F1' }}>
                     ← Back to login
                   </Link>
                 </Typography>

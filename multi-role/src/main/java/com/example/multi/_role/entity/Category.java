@@ -15,5 +15,13 @@ public class Category extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false, unique = true)
+    private String categoryCode;
+
     private String description;
+
+    private String icon;
+
+    @Column(nullable = false)
+    private String status = "ACTIVE"; // ACTIVE, INACTIVE
 }

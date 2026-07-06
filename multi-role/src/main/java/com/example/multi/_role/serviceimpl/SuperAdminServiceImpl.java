@@ -36,7 +36,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         }
         Category category = new Category();
         category.setName(request.getName());
+        category.setCategoryCode(request.getCategoryCode());
         category.setDescription(request.getDescription());
+        if (request.getIcon() != null) {
+            category.setIcon(request.getIcon());
+        }
         return categoryRepository.save(category);
     }
 
@@ -53,7 +57,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         });
 
         category.setName(request.getName());
+        category.setCategoryCode(request.getCategoryCode());
         category.setDescription(request.getDescription());
+        if (request.getIcon() != null) {
+            category.setIcon(request.getIcon());
+        }
         return categoryRepository.save(category);
     }
 
@@ -99,7 +107,26 @@ public class SuperAdminServiceImpl implements SuperAdminService {
             tenant = new Tenant();
             tenant.setName(request.getCompanyName());
             tenant.setSubdomain(request.getSubdomain());
+            
+            String tCode = request.getTenantCode();
+            if (tCode == null || tCode.isBlank()) {
+                tCode = "T-" + request.getSubdomain().toUpperCase();
+            }
+            tenant.setTenantCode(tCode);
             tenant.setActive(true);
+
+            if (request.getPlanId() != null) {
+                SubscriptionPlan plan = subscriptionPlanRepository.findById(request.getPlanId())
+                        .orElseThrow(() -> new RuntimeException("Subscription Plan not found"));
+                tenant.setSubscriptionPlan(plan);
+            }
+
+            if (request.getCategoryId() != null) {
+                Category category = categoryRepository.findById(request.getCategoryId())
+                        .orElseThrow(() -> new RuntimeException("Category not found"));
+                tenant.getCategories().add(category);
+            }
+
             tenant = tenantRepository.save(tenant);
         }
 
@@ -112,11 +139,18 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         admin.setFirstName(request.getFirstName());
         admin.setLastName(request.getLastName());
         admin.setEmail(request.getEmail());
+        admin.setPhone(request.getPhone());
         admin.setPassword(passwordEncoder.encode(request.getPassword()));
         admin.setActive(true);
         admin.setApproved(true);
         admin.setRole(adminRole);
         admin.setTenant(tenant);
+
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            admin.getCategories().add(category);
+        }
 
         User savedAdmin = userRepository.save(admin);
         return mapToUserResponse(savedAdmin);
@@ -318,6 +352,22 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     @Transactional
+    public TenantResponse assignSubscriptionPlanToTenant(Long tenantId, Long planId) {
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+
+        SubscriptionPlan plan = null;
+        if (planId != null) {
+            plan = subscriptionPlanRepository.findById(planId)
+                    .orElseThrow(() -> new RuntimeException("Subscription Plan not found"));
+        }
+        tenant.setSubscriptionPlan(plan);
+        Tenant savedTenant = tenantRepository.save(tenant);
+        return mapToTenantResponse(savedTenant);
+    }
+
+    @Override
+    @Transactional
     public void deleteTenant(Long tenantId) {
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new RuntimeException("Tenant not found"));
@@ -448,6 +498,9 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                 .tenantName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .companyName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .subdomain(user.getTenant() != null ? user.getTenant().getSubdomain() : null)
+                .tenantCode(user.getTenant() != null ? user.getTenant().getTenantCode() : null)
+                .phone(user.getPhone())
+                .createdAt(user.getCreatedAt())
                 .categories(categoryNames)
                 .build();
     }
@@ -475,6 +528,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                 .tenantUrl(tenant.getTenantUrl())
                 .adminName(adminName.isEmpty() ? "—" : adminName)
                 .categories(categoryNames)
+                .subscriptionPlan(tenant.getSubscriptionPlan() != null ? tenant.getSubscriptionPlan().getName() : null)
                 .build();
     }
 }
