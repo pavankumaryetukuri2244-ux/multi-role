@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
+﻿import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import {
   Box, Card, CardContent, TextField, Button, Typography,
   Alert, CircularProgress, Link as MuiLink, IconButton,
@@ -43,45 +43,8 @@ const INITIAL: FormValues = {
   companyName: '', subdomain: '', tenantId: '',
 };
 
-<<<<<<< Updated upstream
 export default function RegisterPage() {
-  const [role, setRole] = useState<'USER' | 'ADMIN'>('USER');
-=======
-function validateForm(v: FormValues): FormErrors {
-  const errors: FormErrors = {};
-
-  const firstNameErr = validateRequired(v.firstName, 'First name');
-  if (firstNameErr) errors.firstName = firstNameErr;
-
-  const lastNameErr = validateRequired(v.lastName, 'Last name');
-  if (lastNameErr) errors.lastName = lastNameErr;
-
-  // phone is optional — but if provided it must be exactly 10 digits
-  if (v.phone.trim() && v.phone.replace(/\D/g, '').length !== 10) {
-    errors.general = 'Phone number must be exactly 10 digits';
-  }
-
-  // email is optional — only validate format if provided
-  if (v.email.trim()) {
-    const emailErr = validateEmail(v.email);
-    if (emailErr) errors.email = emailErr;
-  }
-
-  const pwErr = validatePassword(v.password);
-  if (pwErr) errors.password = pwErr;
-
-  if (!v.confirmPassword) {
-    errors.confirmPassword = 'Please confirm your password';
-  } else if (v.password !== v.confirmPassword) {
-    errors.confirmPassword = 'Passwords do not match';
-  }
-
-  return errors;
-}
-
-export default function AdminRegisterPage() {
->>>>>>> Stashed changes
-  const [values, setValues] = useState<FormValues>(INITIAL);
+  const [role, setRole] = useState<'USER' | 'ADMIN'>('USER');  const [values, setValues] = useState<FormValues>(INITIAL);
   const [errors, setErrors] = useState<FormErrors>({});
   const [tenants, setTenants] = useState<TenantResponse[]>([]);
   const [showPw, setShowPw] = useState(false);
@@ -267,34 +230,9 @@ export default function AdminRegisterPage() {
                   required autoComplete="family-name" />
               </Stack>
 
-<<<<<<< Updated upstream
               {/* Phone number */}
               <TextField fullWidth label="Phone Number (optional)" name="phone" value={values.phone}
                 onChange={handleChange} type="tel" autoComplete="tel" />
-=======
-              {/* Phone number — digits only, exactly 10 */}
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                value={values.phone}
-                onChange={(e) => {
-                  // Strip every non-digit character and cap at 10
-                  const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setValues(p => ({ ...p, phone: digits }));
-                }}
-                type="tel"
-                autoComplete="tel"
-                inputProps={{ inputMode: 'numeric', maxLength: 10 }}
-                helperText={
-                  values.phone.length > 0 && values.phone.length < 10
-                    ? `${values.phone.length}/10 digits`
-                    : '10-digit mobile number'
-                }
-                error={values.phone.length > 0 && values.phone.length < 10}
-              />
->>>>>>> Stashed changes
-
               {/* Email */}
               <TextField fullWidth label="Email Address" name="email" type="email"
                 value={values.email} onChange={handleChange} error={Boolean(errors.email)}
@@ -383,3 +321,4 @@ export default function AdminRegisterPage() {
     </Box>
   );
 }
+

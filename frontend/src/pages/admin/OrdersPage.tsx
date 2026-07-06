@@ -4,15 +4,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { DataTable } from '@/components/common';
 import type { Column } from '@/components/common';
 import { formatDate, formatCurrency } from '@/utils/formatters';
-<<<<<<< Updated upstream
 import { getAdminOrders } from '@/services/product.service';
 import type { Order } from '@/services/types/product.types';
-=======
-
-interface Order { id: number; orderNumber: string; customer: string; total: number; status: string; date: string; items: number; }
-
-const MOCK_ORDERS: Order[] = [];
->>>>>>> Stashed changes
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -62,13 +55,7 @@ export default function AdminOrdersPage() {
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-<<<<<<< Updated upstream
         <Typography variant="h4" fontWeight={700}>Orders</Typography>
-=======
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Typography variant="h4" fontWeight={700}>Orders</Typography>
-        </Stack>
->>>>>>> Stashed changes
         <TextField size="small" placeholder="Search orders..." value={search} onChange={e => setSearch(e.target.value)}
           InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }} />
       </Stack>

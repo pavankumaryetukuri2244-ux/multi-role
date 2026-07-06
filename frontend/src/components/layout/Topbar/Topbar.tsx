@@ -25,10 +25,6 @@ const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
   const { isLoading, role } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
-<<<<<<< Updated upstream
-  // ── Smart search modal state ─────────────────────────────────────────────
-=======
->>>>>>> Stashed changes
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
