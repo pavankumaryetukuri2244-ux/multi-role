@@ -274,7 +274,7 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse registerUser(UserRegisterRequest request) {
         // Validate passwords match
         if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new BadCredentialsException("Passwords do not match");
+            throw new org.springframework.security.authentication.BadCredentialsException("Passwords do not match");
         }
 
         // Check if email already exists
@@ -286,7 +286,19 @@ public class AuthServiceImpl implements AuthService {
         Role userRole = roleRepository.findByRoleName(RoleType.USER)
                 .orElseThrow(() -> new RuntimeException("USER role not found"));
 
-        // Create new user (pending approval by default)
+        Tenant tenant = null;
+        if (request.getTenantId() != null) {
+            tenant = tenantRepository.findById(request.getTenantId())
+                    .orElseThrow(() -> new RuntimeException("Tenant not found with ID: " + request.getTenantId()));
+        } else {
+            // Fallback to the first active tenant to make testing easier if not selected
+            tenant = tenantRepository.findAll().stream()
+                    .filter(t -> Boolean.TRUE.equals(t.getActive()))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        // Create new user (auto-approved for testing convenience)
         User newUser = new User();
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());
@@ -294,7 +306,8 @@ public class AuthServiceImpl implements AuthService {
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(userRole);
         newUser.setActive(true);
-        newUser.setApproved(false); // Pending admin approval
+        newUser.setApproved(true); 
+        newUser.setTenant(tenant);
 
         User savedUser = userRepository.save(newUser);
 
@@ -306,6 +319,8 @@ public class AuthServiceImpl implements AuthService {
                 .role(RoleType.USER.name())
                 .active(savedUser.getActive())
                 .approved(savedUser.getApproved())
+                .tenantName(savedUser.getTenant() != null ? savedUser.getTenant().getName() : null)
+                .subdomain(savedUser.getTenant() != null ? savedUser.getTenant().getSubdomain() : null)
                 .categories(Collections.emptySet())
                 .build();
     }

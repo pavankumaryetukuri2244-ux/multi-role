@@ -170,14 +170,17 @@ export default function ResetPasswordPage() {
                   Password reset successfully!
                 </Alert>
                 <Typography variant="body2" textAlign="center">
-                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500}>
+                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500} sx={{ color: '#6366F1' }}>
                     Go to login →
                   </Link>
                 </Typography>
               </Box>
             ) : (
               /* Form */
-              <Box component="form" onSubmit={handleSubmit} noValidate>
+              <Box component="form" onSubmit={handleSubmit} noValidate sx={{
+                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' },
+                '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' },
+              }}>
                 {serverError && (
                   <Alert severity="error" sx={{ mb: 2 }}>
                     {serverError}
@@ -264,7 +267,7 @@ export default function ResetPasswordPage() {
                 </Button>
 
                 <Typography variant="body2" textAlign="center">
-                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500}>
+                  <Link component={RouterLink} to="/login" underline="hover" fontWeight={500} sx={{ color: '#6366F1' }}>
                     ← Back to login
                   </Link>
                 </Typography>

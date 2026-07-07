@@ -11,4 +11,6 @@ public interface TenantRepository extends JpaRepository<Tenant, Long> {
     boolean existsBySubdomain(String subdomain);
     Optional<Tenant> findByCustomDomain(String customDomain);
     boolean existsByCustomDomain(String customDomain);
+    Optional<Tenant> findByTenantCode(String tenantCode);
+    boolean existsByTenantCode(String tenantCode);
 }

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import type { RootState } from '@/store';
+import { ROUTES } from '@/constants/routes';
 import SearchBar from './SearchBar';
-import NotificationBell from './NotificationBell';
 import ThemeSwitcher from './ThemeSwitcher';
 import ProfileMenu from './ProfileMenu';
 import NotificationCenter from '@/components/widgets/NotificationCenter';
@@ -19,12 +22,9 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
-  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
+  const { isLoading, role } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
 
-  // ── Notification panel state ─────────────────────────────────────────────
-  const [notifAnchor, setNotifAnchor] = useState<HTMLButtonElement | null>(null);
-
-  // ── Smart search modal state ─────────────────────────────────────────────
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
@@ -34,10 +34,9 @@ const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
         elevation={0}
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          backdropFilter: 'blur(8px)',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          bgcolor: 'background.paper',
+          bgcolor: '#131921',
+          color: '#FFFFFF',
+          borderBottom: 'none',
           height: 64,
         }}
       >
@@ -48,7 +47,7 @@ const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
             aria-label="Toggle sidebar"
             edge="start"
             size="medium"
-            sx={{ color: 'text.secondary', mr: 0.5 }}
+            sx={{ color: '#FFFFFF', mr: 0.5 }}
           >
             <MenuIcon />
           </IconButton>
@@ -56,11 +55,35 @@ const Topbar: React.FC<TopbarProps> = ({ onSidebarToggle }) => {
           <Box sx={{ flex: 1 }} />
 
           {/* Right-side actions */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {/* Create Admin button — only visible to SUPER_ADMIN */}
+            {role === 'SUPER_ADMIN' && (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<PersonAddIcon />}
+                onClick={() => navigate(`${ROUTES.SUPER_ADMIN.ADMINS}?create=true`)}
+                sx={{
+                  borderRadius: 1,
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  px: 2,
+                  bgcolor: '#FFD814',
+                  color: '#0F1111',
+                  '&:hover': { bgcolor: '#F7CA00' },
+                  textTransform: 'none',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 1px 2px rgba(15,17,17,0.15)',
+                }}
+              >
+                Create Admin
+              </Button>
+            )}
+
             {/* Search — opens SmartSearch modal */}
             <SearchBar onSearchOpen={() => setSearchOpen(true)} />
 
-            {/* Notification bell — uses its own built-in popover via NotificationCenter */}
+            {/* Notification center */}
             <NotificationCenter />
 
             <ThemeSwitcher />

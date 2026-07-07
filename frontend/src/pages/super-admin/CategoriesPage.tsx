@@ -73,7 +73,7 @@ export default function CategoriesPage() {
         <TextField fullWidth label="Description" value={formDesc} onChange={e => setFormDesc(e.target.value)} multiline rows={3} />
         <Stack direction="row" justifyContent="flex-end" mt={2} spacing={1}>
           <Button onClick={() => setCreateOpen(false)}>Cancel</Button>
-          <Button variant="contained" onClick={() => createMutation.mutate({ name: formName, description: formDesc })} disabled={!formName.trim()}>Create</Button>
+          <Button variant="contained" onClick={() => createMutation.mutate({ name: formName, categoryCode: formName.toUpperCase().replace(/\s+/g, '_'), description: formDesc })} disabled={!formName.trim()}>Create</Button>
         </Stack>
       </FormModal>
 
@@ -82,7 +82,7 @@ export default function CategoriesPage() {
         <TextField fullWidth label="Description" value={formDesc} onChange={e => setFormDesc(e.target.value)} multiline rows={3} />
         <Stack direction="row" justifyContent="flex-end" mt={2} spacing={1}>
           <Button onClick={() => setEditItem(null)}>Cancel</Button>
-          <Button variant="contained" onClick={() => editItem && updateMutation.mutate({ id: editItem.id, req: { name: formName, description: formDesc } })} disabled={!formName.trim()}>Save</Button>
+          <Button variant="contained" onClick={() => editItem && updateMutation.mutate({ id: editItem.id, req: { name: formName, categoryCode: formName.toUpperCase().replace(/\s+/g, '_'), description: formDesc } })} disabled={!formName.trim()}>Save</Button>
         </Stack>
       </FormModal>
 

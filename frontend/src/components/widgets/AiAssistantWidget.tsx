@@ -5,7 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
-import { useLocation } from 'react-router-dom';
 
 const SUGGESTIONS: Record<string, string[]> = {
   '/super-admin': ['Analyze tenant health', 'View revenue trends', 'Check pending approvals', 'Monitor platform status'],
@@ -15,7 +14,6 @@ const SUGGESTIONS: Record<string, string[]> = {
 
 export default function AiAssistantWidget() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
   const role = useSelector((state: RootState) => state.auth.role);
 
   const prefix = role === 'SUPER_ADMIN' ? '/super-admin' : role === 'ADMIN' ? '/admin' : '/portal';

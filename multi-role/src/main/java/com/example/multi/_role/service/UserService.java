@@ -11,4 +11,6 @@ public interface UserService {
     TenantResponse getTenantInfo(String email);
 
     UserResponse updateProfile(UpdateProfileRequest request, String email);
+
+    void changePassword(com.example.multi._role.dto.request.ChangePasswordRequest request, String email);
 }

@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem, ListItemText, Popover, Badge, IconButton, Divider, Button, Stack } from '@mui/material';
+import { Box, Badge, IconButton, Popover, Typography, Stack, List, ListItemButton, ListItemText, Divider } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,11 +44,11 @@ export default function NotificationCenter() {
             ? <Box sx={{ p: 3, textAlign: 'center' }}><Typography color="text.secondary">No notifications</Typography></Box>
             : <List dense>
                 {recent.map(n => (
-                  <ListItem key={n.id} button onClick={() => handleNotifClick(n.id, n.link)}
+                  <ListItemButton key={n.id} onClick={() => handleNotifClick(n.id, n.link)}
                     sx={{ bgcolor: n.read ? 'transparent' : 'action.hover', '&:hover': { bgcolor: 'action.selected' } }}>
                     <ListItemText primary={n.message} secondary={formatRelativeTime(n.createdAt)}
                       primaryTypographyProps={{ variant: 'body2', fontWeight: n.read ? 400 : 600 }} />
-                  </ListItem>
+                  </ListItemButton>
                 ))}
               </List>}
         </Box>

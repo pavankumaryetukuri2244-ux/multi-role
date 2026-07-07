@@ -36,19 +36,20 @@ const SidebarNavItem: React.FC<SidebarNavItemProps> = ({ item, collapsed, active
       component={NavLink}
       to={item.path}
       sx={{
-        borderRadius: 2,
-        mx: 1,
-        mb: 0.5,
+        borderRadius: 0,
+        mx: 0,
+        mb: 0,
         minHeight: 44,
         justifyContent: collapsed ? 'center' : 'flex-start',
-        px: collapsed ? 1.5 : 2,
+        px: collapsed ? 1.5 : 2.5,
+        borderLeft: active ? `4px solid ${theme.palette.primary.main}` : '4px solid transparent',
         backgroundColor: active
-          ? `${theme.palette.primary.main}1F` // ~12% opacity in hex
+          ? theme.palette.mode === 'light' ? '#EAEDED' : '#232F3E'
           : 'transparent',
-        color: active ? theme.palette.primary.main : theme.palette.text.secondary,
+        color: active ? theme.palette.text.primary : theme.palette.text.secondary,
         '&:hover': {
           backgroundColor: active
-            ? `${theme.palette.primary.main}2E` // slightly more on hover
+            ? theme.palette.mode === 'light' ? '#E3E6E6' : '#37475A'
             : theme.palette.action.hover,
         },
         transition: 'background-color 0.15s ease, color 0.15s ease',

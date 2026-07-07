@@ -24,8 +24,14 @@ public class Tenant extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String subdomain;
 
+    @Column(nullable = false, unique = true)
+    private String tenantCode;
+
     @Column(unique = true)
     private String customDomain;
+
+    @Column(nullable = false)
+    private String status = "ACTIVE"; // ACTIVE, INACTIVE
 
     @Column(nullable = false)
     private Boolean active = true;
@@ -37,6 +43,10 @@ public class Tenant extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+
+    @jakarta.persistence.ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_plan_id")
+    private SubscriptionPlan subscriptionPlan;
 
     public String getTenantUrl() {
         return "http://" + subdomain + ".saas.local:8080";

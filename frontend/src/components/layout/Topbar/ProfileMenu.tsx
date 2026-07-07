@@ -14,6 +14,7 @@ import {
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LockIcon from '@mui/icons-material/Lock';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState, AppDispatch } from '@/store';
@@ -60,8 +61,8 @@ const ProfileMenu: React.FC = () => {
 
   const handleProfile = () => {
     handleClose();
-    if (role === 'SUPER_ADMIN') navigate('/super-admin/settings');
-    else if (role === 'ADMIN') navigate('/admin/settings');
+    if (role === 'SUPER_ADMIN') navigate('/super-admin/profile');
+    else if (role === 'ADMIN') navigate('/admin/profile');
     else navigate('/portal/profile');
   };
 
@@ -141,14 +142,6 @@ const ProfileMenu: React.FC = () => {
           },
         }}
       >
-        {/* User identity row */}
-        <Box sx={{ px: 2, py: 1.5 }}>
-          <Typography variant="subtitle2" fontWeight={600} noWrap>
-            {fullName}
-          </Typography>
-        </Box>
-
-        <Divider />
 
         <MenuItem onClick={handleProfile} sx={{ gap: 1, py: 1 }}>
           <ListItemIcon>
@@ -162,6 +155,13 @@ const ProfileMenu: React.FC = () => {
             <SettingsIcon fontSize="small" />
           </ListItemIcon>
           Settings
+        </MenuItem>
+
+        <MenuItem onClick={handleProfile} sx={{ gap: 1, py: 1 }}>
+          <ListItemIcon>
+            <LockIcon fontSize="small" />
+          </ListItemIcon>
+          Reset Password
         </MenuItem>
 
         <Divider />

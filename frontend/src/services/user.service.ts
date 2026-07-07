@@ -1,9 +1,9 @@
 import apiClient from '@/services/apiClient';
-import type { UpdateProfileRequest } from './types/user.types';
+import type { UpdateProfileRequest, ChangePasswordRequest } from './types/user.types';
 import type { TenantResponse, UserResponse } from './types/super-admin.types';
 
 // Re-export types so consumers can import from this module directly.
-export type { UpdateProfileRequest };
+export type { UpdateProfileRequest, ChangePasswordRequest };
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
 
@@ -21,6 +21,13 @@ export async function getProfile(): Promise<UserResponse> {
 export async function updateProfile(req: UpdateProfileRequest): Promise<UserResponse> {
   const response = await apiClient.put<UserResponse>('/user/profile', req);
   return response.data;
+}
+
+/**
+ * PUT /user/password — change the current user's password.
+ */
+export async function changePassword(req: ChangePasswordRequest): Promise<void> {
+  await apiClient.put('/user/password', req);
 }
 
 // ─── Tenant ───────────────────────────────────────────────────────────────────

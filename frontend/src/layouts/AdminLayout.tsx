@@ -36,8 +36,6 @@ const AdminLayout: React.FC = () => {
     dispatch(toggleSidebar());
   };
 
-  const sidebarWidth = sidebarCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH;
-
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       {/* Sidebar */}
@@ -55,8 +53,6 @@ const AdminLayout: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           minWidth: 0,
-          marginLeft: { xs: 0, sm: `${sidebarWidth}px` },
-          transition: 'margin-left 0.25s ease-out',
         }}
       >
         {/* Topbar */}

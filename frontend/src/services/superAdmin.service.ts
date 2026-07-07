@@ -119,6 +119,13 @@ export async function assignCategoriesToTenant(id: number, req: AssignCategories
   return res.data.data;
 }
 
+export async function assignSubscriptionPlanToTenant(id: number, planId: number | null): Promise<TenantResponse> {
+  const res = await apiClient.put<ApiResponse<TenantResponse>>(
+    `/super-admin/tenants/${id}/subscription-plan?planId=${planId || ''}`
+  );
+  return res.data.data;
+}
+
 export async function deleteTenant(id: number): Promise<void> {
   await apiClient.delete(`/super-admin/tenants/${id}`);
 }

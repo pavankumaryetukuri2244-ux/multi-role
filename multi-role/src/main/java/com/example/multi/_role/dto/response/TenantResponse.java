@@ -29,4 +29,6 @@ public class TenantResponse {
     private String adminName;
 
     private Set<String> categories;
+
+    private String subscriptionPlan;
 }

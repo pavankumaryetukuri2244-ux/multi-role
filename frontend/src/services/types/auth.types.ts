@@ -25,3 +25,12 @@ export interface RegisterAdminRequest {
   companyName: string;
   subdomain: string;
 }
+
+export interface UserRegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  tenantId: number;
+}

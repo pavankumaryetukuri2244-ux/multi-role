@@ -1,13 +1,9 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Box, Typography, Stack, Chip, Button, Grid2, Card, CardContent, CardActions, TextField } from '@mui/material';
 import { FormModal } from '@/components/common';
 
 interface Campaign { id: number; name: string; type: string; status: string; reach: number; }
-const MOCK_CAMPAIGNS: Campaign[] = [
-  { id: 1, name: 'Summer Sale 2024', type: 'Email', status: 'Active', reach: 1240 },
-  { id: 2, name: 'New Product Launch', type: 'Social', status: 'Draft', reach: 0 },
-  { id: 3, name: 'Loyalty Rewards', type: 'Push', status: 'Completed', reach: 3500 },
-];
+const MOCK_CAMPAIGNS: Campaign[] = [];
 
 export default function AdminMarketingPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>(MOCK_CAMPAIGNS);
@@ -19,7 +15,6 @@ export default function AdminMarketingPage() {
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="h4" fontWeight={700}>Marketing</Typography>
-          <Chip label="Demo Data" color="warning" size="small" variant="outlined" />
         </Stack>
         <Button variant="contained" onClick={() => { setForm({ name:'',type:'Email',status:'Draft' }); setCreateOpen(true); }}>Create Campaign</Button>
       </Stack>

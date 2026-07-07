@@ -1,4 +1,4 @@
-﻿import { Box, Typography, Card, CardContent, Grid2, Button, List, ListItem, ListItemText, Chip, Stack } from '@mui/material';
+import { Box, Typography, Card, CardContent, Grid2, Button, List, ListItem, ListItemText, Chip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatDate, formatCurrency } from '@/utils/formatters';
 

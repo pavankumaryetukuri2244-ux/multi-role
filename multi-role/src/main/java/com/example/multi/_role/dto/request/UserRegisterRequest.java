@@ -29,4 +29,6 @@ public class UserRegisterRequest {
     @Size(min = 8, message = "Confirm password must be at least 8 characters")
     @NotBlank(message = "Confirm password is required")
     private String confirmPassword;
+
+    private Long tenantId;
 }
