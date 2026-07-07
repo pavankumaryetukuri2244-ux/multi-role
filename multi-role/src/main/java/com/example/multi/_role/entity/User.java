@@ -1,6 +1,7 @@
 package com.example.multi._role.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Data
 @Entity
 @Table(
         name = "users",
@@ -30,6 +32,8 @@ public class User extends BaseEntity {
     private String password;
 
     private String phone;
+
+    private String profileImage;
 
     private String status = "ACTIVE"; // ACTIVE, INACTIVE, PENDING
 
