@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Avatar,
-  Box,
   Divider,
   IconButton,
   ListItemIcon,
@@ -9,7 +8,6 @@ import {
   MenuItem,
   Skeleton,
   Tooltip,
-  Typography,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -42,8 +40,6 @@ const ProfileMenu: React.FC = () => {
     const l = (lastName ?? '').charAt(0).toUpperCase();
     return f || l ? `${f}${l}` : '?';
   }, [firstName, lastName]);
-
-  const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'User';
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);

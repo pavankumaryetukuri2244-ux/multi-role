@@ -7,7 +7,7 @@ import {
   Avatar, MenuItem, Paper, Table, TableBody,
   TableCell, TableContainer, TableHead, TableRow,
   Tooltip, Switch, FormControlLabel, Autocomplete, createFilterOptions,
-  TablePagination, Card, CardContent, Select, FormControl, InputLabel
+  TablePagination, Card, CardContent, Select, FormControl
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -644,7 +644,7 @@ export default function AdminsPage() {
           <Grid2 size={{ xs: 12, sm: 6 }}>
             <Autocomplete
               value={form.categoryId === 'NEW' ? ({ name: form.categoryName } as any) : categories.find(c => String(c.id) === form.categoryId) || null}
-              onChange={(event, newValue: any) => {
+              onChange={(_, newValue: any) => {
                 if (typeof newValue === 'string') {
                   set('categoryName', newValue);
                   set('categoryId', 'NEW');

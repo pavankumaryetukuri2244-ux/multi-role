@@ -5,10 +5,12 @@ export interface CreateUserRequest {
   lastName: string;
   email: string;
   password: string;
+  phone?: string;
 }
 
 export interface UpdateUserRequest {
   firstName: string;
   lastName: string;
   active: boolean;
+  phone?: string;
 }

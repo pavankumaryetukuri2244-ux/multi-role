@@ -1,6 +1,7 @@
 package com.example.multi._role.config;
 
 import com.example.multi._role.dto.response.ApiResponse;
+import com.example.multi._role.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -88,6 +89,96 @@ public class GlobalExceptionHandler {
             RuntimeException ex
     ) {
         return ResponseEntity.badRequest().body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Category Not Found
+     */
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCategoryNotFound(
+            CategoryNotFoundException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Cart Item Not Found
+     */
+    @ExceptionHandler(CartItemNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCartItemNotFound(
+            CartItemNotFoundException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Insufficient Stock
+     */
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInsufficientStock(
+            InsufficientStockException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Duplicate Cart Item
+     */
+    @ExceptionHandler(DuplicateCartItemException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicateCartItem(
+            DuplicateCartItemException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Duplicate Category
+     */
+    @ExceptionHandler(DuplicateCategoryException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicateCategory(
+            DuplicateCategoryException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ApiResponse.<Void>builder()
+                        .success(false)
+                        .message(ex.getMessage())
+                        .build()
+        );
+    }
+
+    /**
+     * Handles Unauthorized Tenant Access
+     */
+    @ExceptionHandler(UnauthorizedTenantAccessException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnauthorizedTenantAccess(
+            UnauthorizedTenantAccessException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 ApiResponse.<Void>builder()
                         .success(false)
                         .message(ex.getMessage())

@@ -1,17 +1,32 @@
-import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import {
-  Box, Card, CardContent, TextField, Button, Typography,
-  Alert, CircularProgress, Link as MuiLink, IconButton,
-  InputAdornment, Stack, Tabs, Tab, MenuItem, Select,
-  InputLabel, FormControl, FormHelperText
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Link as MuiLink,
+  MenuItem,
+  Select,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { Visibility, VisibilityOff, Business as BusinessIcon, Person as PersonIcon } from '@mui/icons-material';
+import { Business as BusinessIcon, Person as PersonIcon, Visibility, VisibilityOff } from '@mui/icons-material';
+import type { AxiosError } from 'axios';
 import { Link } from 'react-router-dom';
-import { registerAdmin, registerUser, getPublicTenants } from '@/services/auth.service';
+import { getPublicTenants, registerAdmin, registerUser } from '@/services/auth.service';
 import type { RegisterAdminRequest, UserRegisterRequest } from '@/services/auth.service';
 import type { TenantResponse } from '@/services/types';
-import { validateRequired, validateEmail, validatePassword } from '@/utils/validators';
-import type { AxiosError } from 'axios';
+import { validateEmail, validatePassword, validateRequired } from '@/utils/validators';
 
 interface FormValues {
   firstName: string;
@@ -38,49 +53,19 @@ interface FormErrors {
 }
 
 const INITIAL: FormValues = {
-  firstName: '', lastName: '', phone: '',
-  email: '', password: '', confirmPassword: '',
-  companyName: '', subdomain: '', tenantId: '',
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  companyName: '',
+  subdomain: '',
+  tenantId: '',
 };
 
-<<<<<<< Updated upstream
 export default function RegisterPage() {
   const [role, setRole] = useState<'USER' | 'ADMIN'>('USER');
-=======
-function validateForm(v: FormValues): FormErrors {
-  const errors: FormErrors = {};
-
-  const firstNameErr = validateRequired(v.firstName, 'First name');
-  if (firstNameErr) errors.firstName = firstNameErr;
-
-  const lastNameErr = validateRequired(v.lastName, 'Last name');
-  if (lastNameErr) errors.lastName = lastNameErr;
-
-  // phone is optional — but if provided it must be exactly 10 digits
-  if (v.phone.trim() && v.phone.replace(/\D/g, '').length !== 10) {
-    errors.general = 'Phone number must be exactly 10 digits';
-  }
-
-  // email is optional — only validate format if provided
-  if (v.email.trim()) {
-    const emailErr = validateEmail(v.email);
-    if (emailErr) errors.email = emailErr;
-  }
-
-  const pwErr = validatePassword(v.password);
-  if (pwErr) errors.password = pwErr;
-
-  if (!v.confirmPassword) {
-    errors.confirmPassword = 'Please confirm your password';
-  } else if (v.password !== v.confirmPassword) {
-    errors.confirmPassword = 'Passwords do not match';
-  }
-
-  return errors;
-}
-
-export default function AdminRegisterPage() {
->>>>>>> Stashed changes
   const [values, setValues] = useState<FormValues>(INITIAL);
   const [errors, setErrors] = useState<FormErrors>({});
   const [tenants, setTenants] = useState<TenantResponse[]>([]);
@@ -89,24 +74,23 @@ export default function AdminRegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Fetch active tenants for customer registration
   useEffect(() => {
     async function loadTenants() {
       try {
-        const data = await getPublicTenants();
-        setTenants(data);
+        setTenants(await getPublicTenants());
       } catch (err) {
         console.error('Failed to load tenants', err);
       }
     }
+
     loadTenants();
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = e.target;
     if (!name) return;
-    setValues(p => ({ ...p, [name]: value }));
-    setErrors(p => ({ ...p, [name]: undefined }));
+    setValues(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: undefined }));
   };
 
   const handleRoleChange = (_: React.SyntheticEvent, newValue: 'USER' | 'ADMIN') => {
@@ -115,43 +99,37 @@ export default function AdminRegisterPage() {
   };
 
   const validateForm = (v: FormValues): FormErrors => {
-    const errors: FormErrors = {};
+    const nextErrors: FormErrors = {};
 
     const firstNameErr = validateRequired(v.firstName, 'First name');
-    if (firstNameErr) errors.firstName = firstNameErr;
+    if (firstNameErr) nextErrors.firstName = firstNameErr;
 
     const lastNameErr = validateRequired(v.lastName, 'Last name');
-    if (lastNameErr) errors.lastName = lastNameErr;
+    if (lastNameErr) nextErrors.lastName = lastNameErr;
 
-    if (v.email.trim()) {
-      const emailErr = validateEmail(v.email);
-      if (emailErr) errors.email = emailErr;
-    } else {
-      errors.email = 'Email is required';
-    }
+    const emailErr = v.email.trim() ? validateEmail(v.email) : 'Email is required';
+    if (emailErr) nextErrors.email = emailErr;
 
-    const pwErr = validatePassword(v.password);
-    if (pwErr) errors.password = pwErr;
+    const passwordErr = validatePassword(v.password);
+    if (passwordErr) nextErrors.password = passwordErr;
 
     if (!v.confirmPassword) {
-      errors.confirmPassword = 'Please confirm your password';
+      nextErrors.confirmPassword = 'Please confirm your password';
     } else if (v.password !== v.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
+      nextErrors.confirmPassword = 'Passwords do not match';
     }
 
     if (role === 'ADMIN') {
       const companyErr = validateRequired(v.companyName, 'Company name');
-      if (companyErr) errors.companyName = companyErr;
+      if (companyErr) nextErrors.companyName = companyErr;
 
       const subdomainErr = validateRequired(v.subdomain, 'Subdomain');
-      if (subdomainErr) errors.subdomain = subdomainErr;
-    } else {
-      if (v.tenantId === '') {
-        errors.tenantId = 'Please select a company to join';
-      }
+      if (subdomainErr) nextErrors.subdomain = subdomainErr;
+    } else if (v.tenantId === '') {
+      nextErrors.tenantId = 'Please select a company to join';
     }
 
-    return errors;
+    return nextErrors;
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -174,6 +152,7 @@ export default function AdminRegisterPage() {
           password: values.password,
           companyName: values.companyName.trim(),
           subdomain: values.subdomain.trim().toLowerCase(),
+          phone: values.phone.trim() || undefined,
         };
         await registerAdmin(payload);
       } else {
@@ -184,22 +163,22 @@ export default function AdminRegisterPage() {
           password: values.password,
           confirmPassword: values.confirmPassword,
           tenantId: Number(values.tenantId),
+          phone: values.phone.trim() || undefined,
         };
         await registerUser(payload);
       }
       setIsSuccess(true);
     } catch (err) {
-      const axiosErr = err as AxiosError<Record<string, string>>;
-      if (axiosErr.response?.status === 400 && axiosErr.response.data) {
-        const data = axiosErr.response.data;
+      const axiosErr = err as AxiosError<Record<string, string> | { message?: string }>;
+      const responseData = axiosErr.response?.data;
+      if (axiosErr.response?.status === 400 && responseData && !('message' in responseData)) {
         const fieldErrors: FormErrors = {};
-        for (const [key, message] of Object.entries(data)) {
+        for (const [key, message] of Object.entries(responseData)) {
           fieldErrors[key as keyof FormErrors] = String(message);
         }
         setErrors(fieldErrors);
       } else {
-        const errorData = axiosErr.response?.data as { message?: string } | undefined;
-        setErrors({ general: errorData?.message || 'Registration failed. Please try again.' });
+        setErrors({ general: responseData && 'message' in responseData ? responseData.message : 'Registration failed. Please try again.' });
       }
     } finally {
       setIsLoading(false);
@@ -213,9 +192,9 @@ export default function AdminRegisterPage() {
           <CardContent sx={{ p: 4 }}>
             <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>
               <Typography fontWeight={600}>Account created successfully!</Typography>
-              {role === 'ADMIN' 
+              {role === 'ADMIN'
                 ? "Your business account is pending approval. You'll be notified once it's activated."
-                : "You can now sign in to access your portal and start buying products."}
+                : 'You can now sign in to access your portal and start buying products.'}
             </Alert>
             <Typography variant="body2" color="text.secondary" textAlign="center">
               <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} sx={{ color: '#6366F1' }}>Back to Sign In</MuiLink>
@@ -230,8 +209,6 @@ export default function AdminRegisterPage() {
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', px: 2, py: 4 }}>
       <Card sx={{ width: '100%', maxWidth: 520, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 4px 32px rgba(0,0,0,0.08)' }}>
         <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-
-          {/* Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
             <Box sx={{ width: 40, height: 40, borderRadius: 2, background: 'linear-gradient(135deg, #6366F1 0%, #EC4899 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <BusinessIcon sx={{ color: '#fff', fontSize: 22 }} />
@@ -240,9 +217,7 @@ export default function AdminRegisterPage() {
           </Box>
 
           <Typography variant="h5" fontWeight={700} mb={0.5}>Create Account</Typography>
-          <Typography variant="body2" color="text.secondary" mb={3}>
-            Fill in your details to get started
-          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={3}>Fill in your details to get started</Typography>
 
           <Tabs value={role} onChange={handleRoleChange} variant="fullWidth" sx={{ mb: 3, borderBottom: 1, borderColor: 'divider' }}>
             <Tab label="Register as Customer" value="USER" icon={<PersonIcon />} iconPosition="start" />
@@ -251,56 +226,17 @@ export default function AdminRegisterPage() {
 
           {errors.general && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{errors.general}</Alert>}
 
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{
-            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#6366F1' },
-            '& .MuiInputLabel-root.Mui-focused': { color: '#6366F1' },
-          }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate>
             <Stack spacing={2.5}>
-              
-              {/* First Name + Last Name */}
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField fullWidth label="First Name" name="firstName" value={values.firstName}
-                  onChange={handleChange} error={Boolean(errors.firstName)} helperText={errors.firstName}
-                  required autoFocus autoComplete="given-name" />
-                <TextField fullWidth label="Last Name" name="lastName" value={values.lastName}
-                  onChange={handleChange} error={Boolean(errors.lastName)} helperText={errors.lastName}
-                  required autoComplete="family-name" />
+                <TextField fullWidth label="First Name" name="firstName" value={values.firstName} onChange={handleChange} error={Boolean(errors.firstName)} helperText={errors.firstName} required autoFocus autoComplete="given-name" />
+                <TextField fullWidth label="Last Name" name="lastName" value={values.lastName} onChange={handleChange} error={Boolean(errors.lastName)} helperText={errors.lastName} required autoComplete="family-name" />
               </Stack>
 
-<<<<<<< Updated upstream
-              {/* Phone number */}
-              <TextField fullWidth label="Phone Number (optional)" name="phone" value={values.phone}
-                onChange={handleChange} type="tel" autoComplete="tel" />
-=======
-              {/* Phone number — digits only, exactly 10 */}
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                value={values.phone}
-                onChange={(e) => {
-                  // Strip every non-digit character and cap at 10
-                  const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setValues(p => ({ ...p, phone: digits }));
-                }}
-                type="tel"
-                autoComplete="tel"
-                inputProps={{ inputMode: 'numeric', maxLength: 10 }}
-                helperText={
-                  values.phone.length > 0 && values.phone.length < 10
-                    ? `${values.phone.length}/10 digits`
-                    : '10-digit mobile number'
-                }
-                error={values.phone.length > 0 && values.phone.length < 10}
-              />
->>>>>>> Stashed changes
+              <TextField fullWidth label="Phone Number (optional)" name="phone" value={values.phone} onChange={handleChange} type="tel" autoComplete="tel" />
 
-              {/* Email */}
-              <TextField fullWidth label="Email Address" name="email" type="email"
-                value={values.email} onChange={handleChange} error={Boolean(errors.email)}
-                helperText={errors.email} required autoComplete="email" />
+              <TextField fullWidth label="Email Address" name="email" type="email" value={values.email} onChange={handleChange} error={Boolean(errors.email)} helperText={errors.email} required autoComplete="email" />
 
-              {/* USER specific: Company Select */}
               {role === 'USER' && (
                 <FormControl fullWidth error={Boolean(errors.tenantId)}>
                   <InputLabel id="tenant-select-label">Select Company / Business</InputLabel>
@@ -310,71 +246,77 @@ export default function AdminRegisterPage() {
                     value={values.tenantId}
                     label="Select Company / Business"
                     onChange={e => {
-                      setValues(p => ({ ...p, tenantId: e.target.value as number }));
-                      setErrors(p => ({ ...p, tenantId: undefined }));
+                      setValues(prev => ({ ...prev, tenantId: e.target.value as number }));
+                      setErrors(prev => ({ ...prev, tenantId: undefined }));
                     }}
                   >
-                    {tenants.map(t => (
-                      <MenuItem key={t.id} value={t.id}>{t.companyName} ({t.subdomain})</MenuItem>
+                    {tenants.map(tenant => (
+                      <MenuItem key={tenant.id} value={tenant.id}>{tenant.companyName} ({tenant.subdomain})</MenuItem>
                     ))}
-                    {tenants.length === 0 && (
-                      <MenuItem disabled value="">No active businesses available</MenuItem>
-                    )}
+                    {tenants.length === 0 && <MenuItem disabled value="">No active businesses available</MenuItem>}
                   </Select>
                   {errors.tenantId && <FormHelperText>{errors.tenantId}</FormHelperText>}
                 </FormControl>
               )}
 
-              {/* ADMIN specific: Company details */}
               {role === 'ADMIN' && (
                 <>
-                  <TextField fullWidth label="Company Name" name="companyName" value={values.companyName}
-                    onChange={handleChange} error={Boolean(errors.companyName)} helperText={errors.companyName}
-                    required />
-                  <TextField fullWidth label="Subdomain" name="subdomain" value={values.subdomain}
-                    onChange={handleChange} error={Boolean(errors.subdomain)} helperText={errors.subdomain ?? "Your portal URL will be: subdomain.domain.com"}
-                    required placeholder="my-business" />
+                  <TextField fullWidth label="Company Name" name="companyName" value={values.companyName} onChange={handleChange} error={Boolean(errors.companyName)} helperText={errors.companyName} required />
+                  <TextField fullWidth label="Subdomain" name="subdomain" value={values.subdomain} onChange={handleChange} error={Boolean(errors.subdomain)} helperText={errors.subdomain ?? 'Your portal URL will be: subdomain.domain.com'} required placeholder="my-business" />
                 </>
               )}
 
-              {/* Password */}
-              <TextField fullWidth label="Password" name="password"
-                type={showPw ? 'text' : 'password'} value={values.password}
-                onChange={handleChange} error={Boolean(errors.password)}
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPw ? 'text' : 'password'}
+                value={values.password}
+                onChange={handleChange}
+                error={Boolean(errors.password)}
                 helperText={errors.password ?? 'Minimum 8 characters'}
-                required autoComplete="new-password"
-                InputProps={{ endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPw(p => !p)} edge="end" size="small">
-                      {showPw ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                    </IconButton>
-                  </InputAdornment>
-                )}} />
+                required
+                autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPw(prev => !prev)} edge="end" size="small">
+                        {showPw ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-              {/* Confirm Password */}
-              <TextField fullWidth label="Confirm Password" name="confirmPassword"
-                type={showConfirm ? 'text' : 'password'} value={values.confirmPassword}
-                onChange={handleChange} error={Boolean(errors.confirmPassword)}
+              <TextField
+                fullWidth
+                label="Confirm Password"
+                name="confirmPassword"
+                type={showConfirm ? 'text' : 'password'}
+                value={values.confirmPassword}
+                onChange={handleChange}
+                error={Boolean(errors.confirmPassword)}
                 helperText={errors.confirmPassword}
-                required autoComplete="new-password"
-                InputProps={{ endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowConfirm(p => !p)} edge="end" size="small">
-                      {showConfirm ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                    </IconButton>
-                  </InputAdornment>
-                )}} />
+                required
+                autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowConfirm(prev => !prev)} edge="end" size="small">
+                        {showConfirm ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-              <Button type="submit" fullWidth variant="contained" size="large" disabled={isLoading}
-                sx={{ py: 1.5, fontWeight: 600, background: 'linear-gradient(135deg, #6366F1 0%, #EC4899 100%)' }}>
+              <Button type="submit" fullWidth variant="contained" size="large" disabled={isLoading} sx={{ py: 1.5, fontWeight: 600, background: 'linear-gradient(135deg, #6366F1 0%, #EC4899 100%)' }}>
                 {isLoading ? <CircularProgress size={22} color="inherit" /> : 'Create Account'}
               </Button>
 
               <Typography variant="body2" textAlign="center" color="text.secondary">
                 Already have an account?{' '}
-                <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} sx={{ color: '#6366F1' }}>
-                  Sign In
-                </MuiLink>
+                <MuiLink component={Link} to="/login" underline="hover" fontWeight={600} sx={{ color: '#6366F1' }}>Sign In</MuiLink>
               </Typography>
             </Stack>
           </Box>

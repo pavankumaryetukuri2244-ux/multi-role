@@ -9,9 +9,6 @@ import { Sidebar, Topbar } from '@/components/layout';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const SIDEBAR_EXPANDED_WIDTH = 240;
-const SIDEBAR_COLLAPSED_WIDTH = 72;
-
 // ─── Page transition variants ─────────────────────────────────────────────────
 
 const pageVariants = {

@@ -91,6 +91,8 @@ public class UserServiceImpl implements UserService {
                 .tenantName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .companyName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .subdomain(user.getTenant() != null ? user.getTenant().getSubdomain() : null)
+                .phone(user.getPhone())
+                .createdAt(user.getCreatedAt())
                 .categories(categoryNames)
                 .build();
     }

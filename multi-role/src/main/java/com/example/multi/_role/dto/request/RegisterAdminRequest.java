@@ -27,4 +27,6 @@ public class RegisterAdminRequest {
 
     @NotBlank(message = "Subdomain is required")
     private String subdomain;
+
+    private String phone;
 }

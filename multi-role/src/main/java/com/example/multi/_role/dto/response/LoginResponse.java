@@ -17,4 +17,10 @@ public class LoginResponse {
     private String role;
 
     private String message;
+
+    private Long userId;
+
+    private String firstName;
+
+    private String lastName;
 }

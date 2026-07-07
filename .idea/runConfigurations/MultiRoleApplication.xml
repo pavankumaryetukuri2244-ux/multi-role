@@ -1,20 +1,14 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MultiRoleApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.multi._role.MultiRoleApplication" />
-    <module name="multi-role.main" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=test" />
-    <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />
-    <option name="ENABLE_LAUNCH_OPTIMIZATION" value="true" />
-    <option name="ENABLE_DEBUG_OPTIMIZATION" value="true" />
-    <option name="HideToolWindowWhileDebugging" value="false" />
-    <option name="BASE_PATH" value="$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jdk-17.0.19" />
-    <option name="PASS_PARENT_ENVS" value="true" />
     <envs>
       <env name="SPRING_PROFILES_ACTIVE" value="test" />
     </envs>
+    <module name="multi-role.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.multi._role.MultiRoleApplication" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=test" />
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_WORKING_DIR$" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

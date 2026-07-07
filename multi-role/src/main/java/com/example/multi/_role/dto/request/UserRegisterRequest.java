@@ -31,4 +31,6 @@ public class UserRegisterRequest {
     private String confirmPassword;
 
     private Long tenantId;
+
+    private String phone;
 }
