@@ -36,6 +36,8 @@ public class UserResponse {
 
     private String phone;
 
+    private String profileImage;
+
     private java.time.LocalDateTime createdAt;
 
     private Set<String> categories;

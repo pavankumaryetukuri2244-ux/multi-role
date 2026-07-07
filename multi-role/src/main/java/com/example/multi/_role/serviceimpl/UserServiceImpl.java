@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.multi._role.service.FileStorageService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -66,6 +69,25 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    @Transactional
+    public UserResponse uploadProfileImage(MultipartFile file, String email) {
+        User user = findUserByEmail(email);
+        String imagePath = fileStorageService.storeFile(file);
+        user.setProfileImage(imagePath);
+        User savedUser = userRepository.save(user);
+        return mapToUserResponse(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccount(String email) {
+        User user = findUserByEmail(email);
+        user.setActive(false);
+        user.setStatus("DELETED");
+        userRepository.save(user);
+    }
+
     // --- Private Helpers ---
 
     private User findUserByEmail(String email) {
@@ -91,6 +113,9 @@ public class UserServiceImpl implements UserService {
                 .tenantName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .companyName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .subdomain(user.getTenant() != null ? user.getTenant().getSubdomain() : null)
+                .phone(user.getPhone())
+                .profileImage(user.getProfileImage())
+                .createdAt(user.getCreatedAt())
                 .categories(categoryNames)
                 .build();
     }

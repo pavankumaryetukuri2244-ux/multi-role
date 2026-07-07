@@ -21,4 +21,6 @@ public class CreateUserRequest {
     @Size(min = 8, message = "Password must be at least 8 characters")
     @NotBlank(message = "Password is required")
     private String password;
+
+    private String phone;
 }

@@ -147,6 +147,41 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .success(true)
                 .message("Password changed successfully")
+<<<<<<< HEAD
+=======
+                .build());
+    }
+
+    /**
+     * Upload Profile Image
+     *
+     * POST /api/v1/user/profile/image
+     */
+    @PostMapping("/profile/image")
+    public ResponseEntity<ApiResponse<UserResponse>> uploadProfileImage(
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
+            Principal principal
+    ) {
+        UserResponse response = userService.uploadProfileImage(file, principal.getName());
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .success(true)
+                .message("Profile image uploaded successfully")
+                .data(response)
+                .build());
+    }
+
+    /**
+     * Delete Account (Soft Delete)
+     *
+     * DELETE /api/v1/user
+     */
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteAccount(Principal principal) {
+        userService.deleteAccount(principal.getName());
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Account deleted successfully")
+>>>>>>> sandeep-feature
                 .build());
     }
 }

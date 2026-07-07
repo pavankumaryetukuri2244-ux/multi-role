@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class  AuthController {
 
     private final AuthService authService;
 
@@ -114,6 +114,21 @@ public class AuthController {
             UserRegisterRequest request
     ) {
         UserResponse response = authService.registerUser(request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Admin Registration API (Register Business)
+     *
+     * POST /api/v1/auth/register-admin
+     */
+    @PostMapping("/register-admin")
+    public ResponseEntity<UserResponse> registerAdmin(
+            @Valid
+            @RequestBody
+            RegisterAdminRequest request
+    ) {
+        UserResponse response = authService.registerAdmin(request);
         return ResponseEntity.ok(response);
     }
 }

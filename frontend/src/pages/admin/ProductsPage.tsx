@@ -1,26 +1,34 @@
+<<<<<<< HEAD
 ﻿import { useState, useEffect } from 'react';
 import { Box, Button, Typography, Stack, TextField, Chip, CircularProgress, Alert, Snackbar } from '@mui/material';
 import { DataTable, FormModal, ConfirmDialog } from '@/components/common';
+=======
+import { useEffect, useState } from 'react';
+import { Alert, Box, Button, Chip, CircularProgress, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { ConfirmDialog, DataTable, FormModal } from '@/components/common';
+>>>>>>> sandeep-feature
 import type { Column } from '@/components/common';
 import { formatCurrency } from '@/utils/formatters';
-import { getAdminProducts, createAdminProduct, updateAdminProduct, deleteAdminProduct } from '@/services/product.service';
+import { createAdminProduct, deleteAdminProduct, getAdminProducts, updateAdminProduct } from '@/services/product.service';
 import type { Product } from '@/services/types/product.types';
 
-const INITIAL_FORM = { name: '', price: 0, description: '', stock: 0 };
+type ProductForm = Pick<Product, 'name' | 'description' | 'price' | 'stock'>;
+
+const INITIAL_FORM: ProductForm = { name: '', description: '', price: 0, stock: 0 };
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [createOpen, setCreateOpen] = useState(false);
   const [editItem, setEditItem] = useState<Product | null>(null);
   const [deleteItem, setDeleteItem] = useState<Product | null>(null);
-  const [form, setForm] = useState(INITIAL_FORM);
+  const [form, setForm] = useState<ProductForm>(INITIAL_FORM);
   const [actionLoading, setActionLoading] = useState(false);
-
   const [toast, setToast] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
-    open: false, message: '', severity: 'success'
+    open: false,
+    message: '',
+    severity: 'success',
   });
 
   const loadProducts = async () => {
@@ -41,6 +49,21 @@ export default function AdminProductsPage() {
     loadProducts();
   }, []);
 
+  const openCreate = () => {
+    setForm(INITIAL_FORM);
+    setCreateOpen(true);
+  };
+
+  const openEdit = (product: Product) => {
+    setEditItem(product);
+    setForm({
+      name: product.name,
+      description: product.description || '',
+      price: product.price,
+      stock: product.stock,
+    });
+  };
+
   const handleCreate = async () => {
     if (!form.name.trim()) return;
     try {
@@ -51,12 +74,12 @@ export default function AdminProductsPage() {
         price: Number(form.price),
         stock: Number(form.stock),
       });
-      setToast({ open: true, message: 'Product created successfully!', severity: 'success' });
+      setToast({ open: true, message: 'Product created successfully.', severity: 'success' });
       setCreateOpen(false);
       setForm(INITIAL_FORM);
-      loadProducts();
+      await loadProducts();
     } catch (err) {
-      console.error(err);
+      console.error('Failed to create product', err);
       setToast({ open: true, message: 'Failed to create product.', severity: 'error' });
     } finally {
       setActionLoading(false);
@@ -73,12 +96,12 @@ export default function AdminProductsPage() {
         price: Number(form.price),
         stock: Number(form.stock),
       });
-      setToast({ open: true, message: 'Product updated successfully!', severity: 'success' });
+      setToast({ open: true, message: 'Product updated successfully.', severity: 'success' });
       setEditItem(null);
       setForm(INITIAL_FORM);
-      loadProducts();
+      await loadProducts();
     } catch (err) {
-      console.error(err);
+      console.error('Failed to update product', err);
       setToast({ open: true, message: 'Failed to update product.', severity: 'error' });
     } finally {
       setActionLoading(false);
@@ -90,11 +113,11 @@ export default function AdminProductsPage() {
     try {
       setActionLoading(true);
       await deleteAdminProduct(deleteItem.id);
-      setToast({ open: true, message: 'Product deleted successfully!', severity: 'success' });
+      setToast({ open: true, message: 'Product deleted successfully.', severity: 'success' });
       setDeleteItem(null);
-      loadProducts();
+      await loadProducts();
     } catch (err) {
-      console.error(err);
+      console.error('Failed to delete product', err);
       setToast({ open: true, message: 'Failed to delete product.', severity: 'error' });
     } finally {
       setActionLoading(false);
@@ -102,30 +125,47 @@ export default function AdminProductsPage() {
   };
 
   const columns: Column<Product>[] = [
-    { id: 'id', label: 'ID', render: (_: unknown, row: Product) => `#${row.id}`, sortable: true },
+    { id: 'id', label: 'ID', render: (_: unknown, row) => `#${row.id}`, sortable: true },
     { id: 'name', label: 'Product Name', sortable: true },
-    { id: 'description', label: 'Description', render: (_: unknown, row: Product) => row.description || '-' },
-    { id: 'price', label: 'Price', render: (_: unknown, row: Product) => formatCurrency(row.price), align: 'right' },
-    { id: 'stock', label: 'Stock', align: 'right', render: (_: unknown, row: Product) => <Chip label={row.stock} color={row.stock === 0 ? 'error' : row.stock < 10 ? 'warning' : 'success'} size="small" /> },
+    { id: 'description', label: 'Description', render: (_: unknown, row) => row.description || '-' },
+    { id: 'price', label: 'Price', render: (_: unknown, row) => formatCurrency(row.price), align: 'right' },
     {
-      id: 'actions', label: 'Actions',
-      render: (_: unknown, row: Product) => (
+      id: 'stock',
+      label: 'Stock',
+      align: 'right',
+      render: (_: unknown, row) => (
+        <Chip label={row.stock} color={row.stock === 0 ? 'error' : row.stock < 10 ? 'warning' : 'success'} size="small" />
+      ),
+    },
+    {
+      id: 'actions',
+      label: 'Actions',
+      render: (_: unknown, row) => (
         <Stack direction="row" spacing={1}>
-          <Button size="small" onClick={() => {
-            setEditItem(row);
-            setForm({ name: row.name, price: row.price, description: row.description || '', stock: row.stock });
-          }}>Edit</Button>
+          <Button size="small" onClick={() => openEdit(row)}>Edit</Button>
           <Button size="small" color="error" onClick={() => setDeleteItem(row)}>Delete</Button>
         </Stack>
       ),
     },
   ];
+<<<<<<< HEAD
+=======
+
+  const formFields = (
+    <>
+      <TextField fullWidth label="Name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} sx={{ mb: 2 }} required />
+      <TextField fullWidth label="Description" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} sx={{ mb: 2 }} multiline rows={2} />
+      <TextField fullWidth label="Price" type="number" value={form.price} onChange={e => setForm(p => ({ ...p, price: parseFloat(e.target.value) || 0 }))} sx={{ mb: 2 }} required slotProps={{ htmlInput: { min: 0, step: 0.01 } }} />
+      <TextField fullWidth label="Stock" type="number" value={form.stock} onChange={e => setForm(p => ({ ...p, stock: parseInt(e.target.value, 10) || 0 }))} sx={{ mb: 2 }} required slotProps={{ htmlInput: { min: 0 } }} />
+    </>
+  );
+
+>>>>>>> sandeep-feature
   return (
     <Box>
-      {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight={700}>Products</Typography>
-        <Button variant="contained" onClick={() => { setForm(INITIAL_FORM); setCreateOpen(true); }}>Add Product</Button>
+        <Button variant="contained" onClick={openCreate}>Add Product</Button>
       </Stack>
 
       {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
@@ -138,15 +178,12 @@ export default function AdminProductsPage() {
         <DataTable columns={columns} rows={products} keyField="id" />
       )}
 
-      {/* Add Product Modal */}
-      <FormModal open={createOpen} title="Add Product" onClose={() => !actionLoading && setCreateOpen(false)}>
-        <TextField fullWidth label="Name" value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))} sx={{mb:2}} required />
-        <TextField fullWidth label="Description" value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} sx={{mb:2}} multiline rows={2} />
-        <TextField fullWidth label="Price" type="number" value={form.price} onChange={e=>setForm(p=>({...p,price:parseFloat(e.target.value)||0}))} sx={{mb:2}} required slotProps={{ htmlInput: { min: 0, step: 0.01 } }} />
-        <TextField fullWidth label="Stock" type="number" value={form.stock} onChange={e=>setForm(p=>({...p,stock:parseInt(e.target.value)||0}))} sx={{mb:2}} required slotProps={{ htmlInput: { min: 0 } }} />
+      <FormModal open={createOpen} title="Add Product" onClose={() => !actionLoading && setCreateOpen(false)} loading={actionLoading}>
+        {formFields}
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
           <Button onClick={() => setCreateOpen(false)} disabled={actionLoading}>Cancel</Button>
           <Button variant="contained" onClick={handleCreate} disabled={actionLoading}>
+<<<<<<< HEAD
             {actionLoading ? <CircularProgress size={16} /> : 'Add'}          </Button>
         </Stack>
       </FormModal>
@@ -167,8 +204,33 @@ export default function AdminProductsPage() {
       {/* Delete Confirm Modal */}
       <ConfirmDialog open={!!deleteItem} title="Delete Product" message={`Delete "${deleteItem?.name}"? This action cannot be undone.`} confirmColor="error"
         onConfirm={handleDelete} onCancel={() => setDeleteItem(null)} />
+=======
+            {actionLoading ? <CircularProgress size={16} /> : 'Add'}
+          </Button>
+        </Stack>
+      </FormModal>
 
-      {/* Toast Notification */}
+      <FormModal open={!!editItem} title="Edit Product" onClose={() => !actionLoading && setEditItem(null)} loading={actionLoading}>
+        {formFields}
+        <Stack direction="row" justifyContent="flex-end" spacing={1}>
+          <Button onClick={() => setEditItem(null)} disabled={actionLoading}>Cancel</Button>
+          <Button variant="contained" onClick={handleUpdate} disabled={actionLoading}>
+            {actionLoading ? <CircularProgress size={16} /> : 'Save'}
+          </Button>
+        </Stack>
+      </FormModal>
+
+      <ConfirmDialog
+        open={!!deleteItem}
+        title="Delete Product"
+        message={`Delete "${deleteItem?.name}"? This action cannot be undone.`}
+        confirmColor="error"
+        loading={actionLoading}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteItem(null)}
+      />
+>>>>>>> sandeep-feature
+
       <Snackbar
         open={toast.open}
         autoHideDuration={6000}
@@ -178,7 +240,12 @@ export default function AdminProductsPage() {
         <Alert onClose={() => setToast(p => ({ ...p, open: false }))} severity={toast.severity} sx={{ width: '100%', borderRadius: 2 }}>
           {toast.message}
         </Alert>
+<<<<<<< HEAD
       </Snackbar>    </Box>
+=======
+      </Snackbar>
+    </Box>
+>>>>>>> sandeep-feature
   );
 }
 

@@ -1,7 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { darkTokens } from './themeTokens';
 import { typography } from './typography';
-import { glassDark } from './glassmorphism';
 
 export const darkTheme = createTheme({
   palette: { mode: 'dark', ...darkTokens },

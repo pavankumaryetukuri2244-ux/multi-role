@@ -2,7 +2,11 @@
   "compilerOptions": {
     "composite": true,
     "target": "ES2022",
+<<<<<<< HEAD
     "lib": ["ES2023", "DOM"],
+=======
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+>>>>>>> sandeep-feature
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -11,9 +15,16 @@
     "noEmit": false,
     "emitDeclarationOnly": true,
     "strict": true,
+<<<<<<< HEAD
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
+=======
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node", "vitest/globals"]
+>>>>>>> sandeep-feature
   },
 
   "include": ["vite.config.ts"]

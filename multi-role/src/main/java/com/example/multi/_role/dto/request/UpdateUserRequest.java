@@ -13,4 +13,6 @@ public class UpdateUserRequest {
     private String lastName;
 
     private Boolean active;
+
+    private String phone;
 }

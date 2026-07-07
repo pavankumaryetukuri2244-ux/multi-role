@@ -102,6 +102,9 @@ public class AuthServiceImpl implements AuthService {
                                 .getRoleName()
                                 .name()
                 )
+                .userId(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .message("Login Successful")
                 .build();
     }
@@ -170,6 +173,9 @@ public class AuthServiceImpl implements AuthService {
                                 .getRoleName()
                                 .name()
                 )
+                .userId(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .message("Admin Login Successful")
                 .build();
     }
@@ -202,6 +208,7 @@ public class AuthServiceImpl implements AuthService {
         admin.setLastName(request.getLastName());
         admin.setEmail(request.getEmail());
         admin.setPassword(passwordEncoder.encode(request.getPassword()));
+        admin.setPhone(request.getPhone());
         admin.setActive(true);
         admin.setApproved(true);
         admin.setRole(adminRole);
@@ -218,6 +225,10 @@ public class AuthServiceImpl implements AuthService {
                 .active(savedAdmin.getActive())
                 .approved(savedAdmin.getApproved())
                 .tenantName(tenant.getName())
+                .companyName(tenant.getName())
+                .subdomain(tenant.getSubdomain())
+                .phone(savedAdmin.getPhone())
+                .createdAt(savedAdmin.getCreatedAt())
                 .categories(Collections.emptySet())
                 .build();
     }
@@ -233,40 +244,47 @@ public class AuthServiceImpl implements AuthService {
         int otpInt = (int) (Math.random() * 900000) + 100000;
         String otp = String.valueOf(otpInt);
 
+        // Generate UUID reset token
+        String resetToken = java.util.UUID.randomUUID().toString();
+
         PasswordResetToken token = new PasswordResetToken();
         token.setEmail(email);
         token.setOtp(otp);
-        token.setExpiresAt(java.time.LocalDateTime.now().plusMinutes(10));
+        token.setToken(resetToken);
+        token.setExpiresAt(java.time.LocalDateTime.now().plusMinutes(15));
         token.setUsed(false);
         passwordResetTokenRepository.save(token);
 
-        // In production, send via email. For now, log to console
-        System.out.println("[DEV] Password reset OTP for " + email + " is: " + otp);
+        // In production, send via email. For now, log link to console
+        String resetLink = "http://localhost:5173/reset-password?token=" + resetToken;
+        System.out.println("\n==================================================");
+        System.out.println("[DEV] Password reset link for " + email + " is:");
+        System.out.println(resetLink);
+        System.out.println("==================================================\n");
     }
 
     @Override
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
-        String email = request.getEmail();
-        String otp = request.getOtp();
+        String tokenVal = request.getToken();
         String newPassword = request.getNewPassword();
 
-        PasswordResetToken token = passwordResetTokenRepository
-                .findTopByEmailAndOtpAndUsedFalseOrderByExpiresAtDesc(email, otp)
-                .orElseThrow(() -> new RuntimeException("Invalid OTP or email"));
+        PasswordResetToken resetToken = passwordResetTokenRepository
+                .findByTokenAndUsedFalse(tokenVal)
+                .orElseThrow(() -> new RuntimeException("Invalid or already used password reset link"));
 
-        if (token.getExpiresAt().isBefore(java.time.LocalDateTime.now())) {
-            throw new RuntimeException("OTP has expired");
+        if (resetToken.getExpiresAt().isBefore(java.time.LocalDateTime.now())) {
+            throw new RuntimeException("Password reset link has expired");
         }
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(resetToken.getEmail())
                 .orElseThrow(() -> new RuntimeException("No user registered with this email"));
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        token.setUsed(true);
-        passwordResetTokenRepository.save(token);
+        resetToken.setUsed(true);
+        passwordResetTokenRepository.save(resetToken);
     }
 
     @Override
@@ -304,6 +322,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setLastName(request.getLastName());
         newUser.setEmail(request.getEmail());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setPhone(request.getPhone());
         newUser.setRole(userRole);
         newUser.setActive(true);
         newUser.setApproved(true); 
@@ -320,7 +339,10 @@ public class AuthServiceImpl implements AuthService {
                 .active(savedUser.getActive())
                 .approved(savedUser.getApproved())
                 .tenantName(savedUser.getTenant() != null ? savedUser.getTenant().getName() : null)
+                .companyName(savedUser.getTenant() != null ? savedUser.getTenant().getName() : null)
                 .subdomain(savedUser.getTenant() != null ? savedUser.getTenant().getSubdomain() : null)
+                .phone(savedUser.getPhone())
+                .createdAt(savedUser.getCreatedAt())
                 .categories(Collections.emptySet())
                 .build();
     }

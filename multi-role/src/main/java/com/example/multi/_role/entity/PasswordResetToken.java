@@ -17,6 +17,8 @@ public class PasswordResetToken {
 
     private String otp;
 
+    private String token;
+
     private LocalDateTime expiresAt;
 
     private Boolean used = false;

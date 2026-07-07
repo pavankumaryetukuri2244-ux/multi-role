@@ -1,21 +1,25 @@
 package com.example.multi._role.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "categories")
+@Table(
+        name = "categories",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name", "tenant_id"}),
+                @UniqueConstraint(columnNames = {"category_code", "tenant_id"})
+        }
+)
 public class Category extends BaseEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "category_code", nullable = false)
     private String categoryCode;
 
     private String description;
@@ -24,4 +28,8 @@ public class Category extends BaseEntity {
 
     @Column(nullable = false)
     private String status = "ACTIVE"; // ACTIVE, INACTIVE
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private Tenant tenant;
 }

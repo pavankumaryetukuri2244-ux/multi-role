@@ -13,4 +13,8 @@ public interface UserService {
     UserResponse updateProfile(UpdateProfileRequest request, String email);
 
     void changePassword(com.example.multi._role.dto.request.ChangePasswordRequest request, String email);
+
+    UserResponse uploadProfileImage(org.springframework.web.multipart.MultipartFile file, String email);
+
+    void deleteAccount(String email);
 }

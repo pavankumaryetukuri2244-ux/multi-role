@@ -36,12 +36,7 @@ public class Tenant extends BaseEntity {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "tenant_categories",
-            joinColumns = @JoinColumn(name = "tenant_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @jakarta.persistence.OneToMany(mappedBy = "tenant", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories = new HashSet<>();
 
     @jakarta.persistence.ManyToOne(fetch = FetchType.LAZY)

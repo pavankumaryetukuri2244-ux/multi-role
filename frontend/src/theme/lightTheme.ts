@@ -1,7 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { lightTokens } from './themeTokens';
 import { typography } from './typography';
-import { glassLight } from './glassmorphism';
 
 export const lightTheme = createTheme({
   palette: { mode: 'light', ...lightTokens },

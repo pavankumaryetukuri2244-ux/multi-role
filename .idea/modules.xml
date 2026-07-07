@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/multi -role.iml" filepath="$PROJECT_DIR$/.idea/multi -role.iml" />
-<<<<<<< Updated upstream
-=======
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-role.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-role.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-role.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-role.test.iml" />
->>>>>>> Stashed changes
     </modules>
   </component>
 </project>

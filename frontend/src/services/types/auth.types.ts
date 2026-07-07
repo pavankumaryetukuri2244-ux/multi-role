@@ -24,6 +24,7 @@ export interface RegisterAdminRequest {
   password: string;
   companyName: string;
   subdomain: string;
+  phone?: string;
 }
 
 export interface UserRegisterRequest {
@@ -33,4 +34,5 @@ export interface UserRegisterRequest {
   password: string;
   confirmPassword: string;
   tenantId: number;
+  phone?: string;
 }

@@ -45,6 +45,7 @@ public class AdminServiceImpl implements AdminService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhone(request.getPhone());
         user.setActive(true);
         user.setApproved(true);
         user.setRole(userRole);
@@ -69,6 +70,7 @@ public class AdminServiceImpl implements AdminService {
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
+        user.setPhone(request.getPhone());
         if (request.getActive() != null) {
             user.setActive(request.getActive());
         }
@@ -141,6 +143,8 @@ public class AdminServiceImpl implements AdminService {
                 .tenantName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .companyName(user.getTenant() != null ? user.getTenant().getName() : null)
                 .subdomain(user.getTenant() != null ? user.getTenant().getSubdomain() : null)
+                .phone(user.getPhone())
+                .createdAt(user.getCreatedAt())
                 .categories(Collections.emptySet())
                 .build();
     }

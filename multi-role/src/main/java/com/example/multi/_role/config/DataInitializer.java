@@ -24,6 +24,10 @@ public class DataInitializer {
     private final UserRepository userRepository;
     private final TenantRepository tenantRepository;
     private final ProductRepository productRepository;
+<<<<<<< HEAD
+=======
+
+>>>>>>> sandeep-feature
     private final SubscriptionPlanRepository planRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -73,6 +77,10 @@ public class DataInitializer {
                 testTenant = tenantRepository.save(testTenant);
             }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> sandeep-feature
             // Create a test USER (Customer) user linked to the default Tenant
             boolean customerExists = userRepository.findByEmail("customer@saas.local").isPresent();
             if (!customerExists) {
@@ -128,6 +136,19 @@ public class DataInitializer {
                 log.info("✓ Sample products seeded for Test Company");
             }
 
+<<<<<<< HEAD
+=======
+            log.info("✓ Database initialization completed!");
+            log.info("");
+            log.info("╔════════════════════════════════════════╗");
+            log.info("║  Application Ready for Testing!        ║");
+            log.info("╠════════════════════════════════════════╣");
+            log.info("║  API URL: http://localhost:8080        ║");
+            log.info("║  Health: http://localhost:8080/actuator/health");
+            log.info("║  H2 Console: http://localhost:8080/h2-console");
+            log.info("╚════════════════════════════════════════╝");
+
+>>>>>>> sandeep-feature
             if (userRepository.findByEmail("user@saas.local").isEmpty()) {
                 User u = new User();
                 u.setFirstName("Test"); u.setLastName("Admin");
@@ -140,6 +161,10 @@ public class DataInitializer {
                 log.info("Test ADMIN created");
             }
             log.info("Database initialization completed!");
+<<<<<<< HEAD
+=======
+
+>>>>>>> sandeep-feature
         };
     }
 
